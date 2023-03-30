@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.280">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="E. ZEGHAL">
+
+<title>13C_nanoplastics_degradation_analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="documentation_files/libs/clipboard/clipboard.min.js"></script>
+<script src="documentation_files/libs/quarto-html/quarto.js"></script>
+<script src="documentation_files/libs/quarto-html/popper.min.js"></script>
+<script src="documentation_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="documentation_files/libs/quarto-html/anchor.min.js"></script>
+<link href="documentation_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="documentation_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="documentation_files/libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="documentation_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="documentation_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="documentation_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="documentation_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article toc-left">
+<div id="quarto-sidebar-toc-left" class="sidebar toc-left">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#co2-in-head-space" id="toc-co2-in-head-space" class="nav-link active" data-scroll-target="#co2-in-head-space">CO<sub>2</sub> in head-space</a>
+  <ul>
+  <li><a href="#compute-calibration-curves" id="toc-compute-calibration-curves" class="nav-link" data-scroll-target="#compute-calibration-curves">compute calibration curves</a>
+  <ul>
+  <li><a href="#first-set-of-samples" id="toc-first-set-of-samples" class="nav-link" data-scroll-target="#first-set-of-samples"><strong>First set of samples</strong></a></li>
+  <li><a href="#second-set-of-samples-kill-controls" id="toc-second-set-of-samples-kill-controls" class="nav-link" data-scroll-target="#second-set-of-samples-kill-controls"><strong>Second set of samples (Kill controls)</strong></a></li>
+  </ul></li>
+  <li><a href="#concentration-of-co2-in-head-spaces-in-ppms-amounts-in-mmol-and-µmol" id="toc-concentration-of-co2-in-head-spaces-in-ppms-amounts-in-mmol-and-µmol" class="nav-link" data-scroll-target="#concentration-of-co2-in-head-spaces-in-ppms-amounts-in-mmol-and-µmol">Concentration of CO<sub>2</sub> in head-spaces in ppms, amounts in mmol and µmol</a>
+  <ul>
+  <li><a href="#kill-controls" id="toc-kill-controls" class="nav-link" data-scroll-target="#kill-controls">kill controls</a></li>
+  <li><a href="#c-pe-incubations-13c-pp-incubations-and-background-seawater" id="toc-c-pe-incubations-13c-pp-incubations-and-background-seawater" class="nav-link" data-scroll-target="#c-pe-incubations-13c-pp-incubations-and-background-seawater">13C-PE incubations, 13C-PP incubations and background seawater</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#total-co2-in-systems" id="toc-total-co2-in-systems" class="nav-link" data-scroll-target="#total-co2-in-systems">Total CO<sub>2</sub> in systems</a>
+  <ul>
+  <li><a href="#dic-modelisation" id="toc-dic-modelisation" class="nav-link" data-scroll-target="#dic-modelisation">DIC modelisation</a></li>
+  <li><a href="#total-co2-in-kill-controls" id="toc-total-co2-in-kill-controls" class="nav-link" data-scroll-target="#total-co2-in-kill-controls">Total CO<sub>2</sub> in kill controls</a></li>
+  <li><a href="#total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater" id="toc-total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater" class="nav-link" data-scroll-target="#total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater">Total CO<sub>2</sub> in 13C-PE incubations, 13C-PP incubations and background seawater</a></li>
+  </ul></li>
+  <li><a href="#nanoplastics-degradation" id="toc-nanoplastics-degradation" class="nav-link" data-scroll-target="#nanoplastics-degradation">Nanoplastics degradation</a>
+  <ul>
+  <li><a href="#seawater-background-13c-fractionation" id="toc-seawater-background-13c-fractionation" class="nav-link" data-scroll-target="#seawater-background-13c-fractionation">Seawater background <sup>13</sup>C fractionation</a></li>
+  <li><a href="#excess-13co2-production-in-kill-controls" id="toc-excess-13co2-production-in-kill-controls" class="nav-link" data-scroll-target="#excess-13co2-production-in-kill-controls">excess <sup>13</sup>CO<sub>2</sub> production in kill controls</a></li>
+  <li><a href="#c-pe-degradation" id="toc-c-pe-degradation" class="nav-link" data-scroll-target="#c-pe-degradation"><sup>13</sup>C-PE degradation</a></li>
+  <li><a href="#c-pp-degradation" id="toc-c-pp-degradation" class="nav-link" data-scroll-target="#c-pp-degradation"><sup>13</sup>C-PP degradation</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">13C_nanoplastics_degradation_analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>E. ZEGHAL </p>
+          </div>
+  </div>
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">March 30, 2023</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggpmisc")</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggpmisc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="co2-in-head-space" class="level2">
+<h2 class="anchored" data-anchor-id="co2-in-head-space">CO<sub>2</sub> in head-space</h2>
+<section id="compute-calibration-curves" class="level3">
+<h3 class="anchored" data-anchor-id="compute-calibration-curves">compute calibration curves</h3>
+<p>First, I compute calibration curves linear regression models. Then, I use those equation to transform the areas under CO<sub>2</sub> peaks (obtained from GC-FID) into CO<sub>2</sub> ppm. Since the CO<sub>2</sub> measurements were made in two separate sets. I end up with two different calibration curves.</p>
+<section id="first-set-of-samples" class="level4">
+<h4 class="anchored" data-anchor-id="first-set-of-samples"><strong>First set of samples</strong></h4>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>calib_1 <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/calibration_curve_GC-FID_Mishal.txt"</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>linear_reg_1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ppm <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> area, <span class="at">data =</span> calib_1 ) <span class="co"># the"+0" forces intercept through 0</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>slope_1 <span class="ot">&lt;-</span> linear_reg_1<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>calib_curve_1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> calib_1, <span class="fu">aes</span>(<span class="at">x =</span> area, <span class="at">y =</span> ppm)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="dv">0</span>, <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_poly_line(formula = y ~ x + 0) +</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="dv">0</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">7</span>, <span class="at">size=</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cadetblue"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"calibration curve for CO2 PP, PE and background"</span>, <span class="at">subtitle =</span> <span class="st">"Mishal - June 2022"</span>) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>calib_curve_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/calib_curve_1%20plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="second-set-of-samples-kill-controls" class="level4">
+<h4 class="anchored" data-anchor-id="second-set-of-samples-kill-controls"><strong>Second set of samples (Kill controls)</strong></h4>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>calib_2 <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/calibration_curve_kill_controls.txt"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>linear_reg_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ppm <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> area, <span class="at">data =</span> calib_2 )</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>slope_2 <span class="ot">&lt;-</span> linear_reg_2<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/calib_curve_2%20plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="concentration-of-co2-in-head-spaces-in-ppms-amounts-in-mmol-and-µmol" class="level3">
+<h3 class="anchored" data-anchor-id="concentration-of-co2-in-head-spaces-in-ppms-amounts-in-mmol-and-µmol">Concentration of CO<sub>2</sub> in head-spaces in ppms, amounts in mmol and µmol</h3>
+<p>I’ll use the calibration curves equations to calculate the ppm of CO<sub>2</sub> in the head-spaces <code>CO2_ppm = co2_area * slope</code>. Then, from the concentration in (ppm), I determine the volume in (ml) <code>CO2_HS_ml = HS_ml/1000000*CO2_ppm</code> . After that, using the ideal gas law, I calculate the amount of CO<sub>2</sub> in (mmol) <code>CO2_mmol = ((pressure_bar+delta_pressure)*CO2_HS_ml)/(0.083145*(273.15+T_C))</code>. Finally I convert to (µmol).</p>
+<p>In this experiment, all incubations were left in a temperature controlled room at 22ºC, the difference in pressure <code>delta_pressure</code> was negligible (3 digits after 0). so we set that value to <code>0</code>.</p>
+<hr>
+<p><strong><em>Reminder:</em></strong></p>
+<p>Ideal gas law: <span class="math inline">PV=nRT</span></p>
+<p>If</p>
+<ul>
+<li><p>the pressure <span class="math inline">P</span> is in atmospheres (atm),</p></li>
+<li><p>the volume <span class="math inline">V</span> is in liters (L),</p></li>
+<li><p>the moles <span class="math inline">n</span> is in moles (mol),</p></li>
+<li><p>and temperature <span class="math inline">T</span> is in Kelvin (K)</p></li>
+</ul>
+<p>Then <span class="math inline">R</span> is in <span class="math inline">L⋅atm/mol⋅K.R</span> has the value <span class="math inline">0.082057 L⋅atm/mol⋅K</span> with the above units for the rest of variables.</p>
+<p>In other scenarios with pressure in (bar) instead, one may also use <span class="math inline">0.083145 L⋅bar/mol⋅K</span>.</p>
+<p>However, temperature is always in Kelvin (K), as <span class="math inline">R</span> uses units of <span class="math inline">K</span></p>
+<hr>
+<section id="kill-controls" class="level4">
+<h4 class="anchored" data-anchor-id="kill-controls">kill controls</h4>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kill_c <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/kill_controls.txt"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>kill_c <span class="ot">&lt;-</span> kill_c <span class="sc">|&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_ppm =</span> co2_area <span class="sc">*</span> slope_2) <span class="sc">|&gt;</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_HS_ml =</span> HS_ml<span class="sc">/</span><span class="dv">1000000</span><span class="sc">*</span>CO2_ppm) <span class="sc">|&gt;</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_mmol =</span> ((pressure_bar<span class="sc">+</span>delta_pressure)<span class="sc">*</span>CO2_HS_ml)<span class="sc">/</span>(<span class="fl">0.083145</span><span class="sc">*</span>(<span class="fl">273.15</span><span class="sc">+</span>T_C))) <span class="sc">|&gt;</span> </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_umol =</span> CO2_mmol<span class="sc">*</span><span class="dv">1000</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kill_c, "./data_used/kill_controls_calc1.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>let’s calculate the averages for each incubation time and type.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>kills_summary <span class="ot">&lt;-</span> kill_c<span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation, time ) <span class="sc">|&gt;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_CO2_mmol =</span> <span class="fu">mean</span>(CO2_mmol), <span class="at">std_CO2_mmol =</span> <span class="fu">sd</span>(CO2_mmol),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_CO2_umol =</span> <span class="fu">mean</span>(CO2_umol), <span class="at">std_CO2_umol =</span> <span class="fu">sd</span>(CO2_umol),</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_delta_13c =</span> <span class="fu">mean</span>(delta_13C), <span class="at">std_delta_13c =</span> <span class="fu">sd</span>(delta_13C))<span class="sc">|&gt;</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="co">#ungroup() needed to later convert chr to fct</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kills_summary, "./data_used/kill_controls_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="c-pe-incubations-13c-pp-incubations-and-background-seawater" class="level4">
+<h4 class="anchored" data-anchor-id="c-pe-incubations-13c-pp-incubations-and-background-seawater">13C-PE incubations, 13C-PP incubations and background seawater</h4>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>experiment <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data_used/polymers_incubations.csv"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>experiment <span class="ot">&lt;-</span> experiment <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_ppm =</span> co2_area <span class="sc">*</span> slope_1) <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_HS_ml =</span> HS_ml<span class="sc">/</span><span class="dv">1000000</span><span class="sc">*</span>CO2_ppm) <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_mmol =</span> ((pressure_bar<span class="sc">+</span>delta_pressure)<span class="sc">*</span>CO2_HS_ml)<span class="sc">/</span>(<span class="fl">0.083145</span><span class="sc">*</span>(<span class="fl">273.15</span><span class="sc">+</span>T_C))) <span class="sc">|&gt;</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_umol =</span> CO2_mmol<span class="sc">*</span><span class="dv">1000</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment, "../data_used/polymers_incubations_calc1.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>let’s calculate the averages for each incubation time and type.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>experiment_summary <span class="ot">&lt;-</span> experiment<span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation, time ) <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_CO2_mmol =</span> <span class="fu">mean</span>(CO2_mmol), <span class="at">std_CO2_mmol =</span> <span class="fu">sd</span>(CO2_mmol),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_CO2_umol =</span> <span class="fu">mean</span>(CO2_umol), <span class="at">std_CO2_umol =</span> <span class="fu">sd</span>(CO2_umol),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_delta_13c =</span> <span class="fu">mean</span>(delta_13C, <span class="at">na.rm =</span> T), <span class="at">std_delta_13c =</span> <span class="fu">sd</span>(delta_13C, <span class="at">na.rm =</span>T) ) <span class="sc">|&gt;</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>experiment_summary</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment_summary, "./data_used/polymers_incubations_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+</section>
+<section id="total-co2-in-systems" class="level2">
+<h2 class="anchored" data-anchor-id="total-co2-in-systems">Total CO<sub>2</sub> in systems</h2>
+<p>one of the variable I’ll need later is the liquid phase volume in liter, which is 150 (ml) in my experiment. Here I upload it as <code>liquid_L &lt;- 0.15</code> .</p>
+<div class="cell">
+
+</div>
+<section id="dic-modelisation" class="level3">
+<h3 class="anchored" data-anchor-id="dic-modelisation">DIC modelisation</h3>
+<p>In order to calculate total CO2 amounts. the amount of CO2 in the liquid phase need to be added to the values calculated for the headspace in [CO2 in head-space].</p>
+<p>One of the issues encountered here is that it wasn’t possible to sub-sample for DIC measurements in each timepoint. (we are following CO2 production here so opening up our bottles isn’t an option). what I have is DIC measurements at the beginning and the end of the experiment. as CO2 production followed a linear trend, I’ll assume the same for DIC. So now I’ll calculate the linear regression for the evolution of CO2 in the liquid phase for each type incubation</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>DIC_tab <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/DIC_measures.txt"</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>DIC_summary <span class="ot">&lt;-</span> DIC_tab <span class="sc">|&gt;</span> </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_DIC_uM =</span> <span class="fu">mean</span>(DIC_uM), <span class="at">std_DIC_uM =</span> <span class="fu">sd</span>(DIC_uM)) <span class="sc">|&gt;</span> </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">DIC_L_Phase =</span> average_DIC_uM<span class="sc">*</span>liquid_L)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>Co2_HS <span class="ot">&lt;-</span> <span class="fu">rbind</span>((experiment_summary <span class="sc">|&gt;</span> <span class="fu">select</span>(incubation, time, average_CO2_umol)),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>      (kills_summary <span class="sc">|&gt;</span> <span class="fu">select</span>(incubation, time, average_CO2_umol)))</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>DIC_models <span class="ot">&lt;-</span> <span class="fu">left_join</span>(DIC_summary, Co2_HS) <span class="sc">|&gt;</span> <span class="co">#Joining with `by = join_by(incubation, time)`</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ratio =</span> average_CO2_umol<span class="sc">/</span>DIC_L_Phase)<span class="sc">|&gt;</span> </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>DIC_models<span class="sc">$</span>std_DIC_uM <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(DIC_models, "./data_used/DIC_models.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|label: DIC models plots</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>safe <span class="ot">&lt;-</span> <span class="fu">c</span> (<span class="st">"#CC6677"</span>, <span class="st">"#DDCC77"</span>,<span class="st">"#88CCEE"</span> ,<span class="st">"#661100"</span>, <span class="st">"#117733"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#332288"</span>, <span class="st">"#44AA99"</span>, <span class="st">"#882255"</span>, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#6699CC"</span>, <span class="st">"#999933"</span>, <span class="st">"#888888"</span>,<span class="st">"#AA4499"</span> ) <span class="co">#palette</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>models_DIC_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> DIC_models, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> ratio, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>incubation)<span class="sc">+</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>(<span class="at">shape =</span> incubation, <span class="at">color =</span> incubation), <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)<span class="sc">+</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"DIC linear regressions"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span> )</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>models_DIC_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DIC_models <span class="ot">&lt;-</span> DIC_models <span class="sc">|&gt;</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character),as_factor))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(DIC_models<span class="sc">$</span>incubation))) {</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>linear_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(ratio <span class="sc">~</span>time , <span class="at">data =</span> DIC_models[DIC_models<span class="sc">$</span>incubation <span class="sc">==</span> <span class="fu">levels</span>(DIC_models<span class="sc">$</span>incubation)[i], ])</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"slope_linear_reg_"</span>, <span class="fu">levels</span>(DIC_models<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"time"</span>]]) </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"intercept_linear_reg_"</span>, <span class="fu">levels</span>(DIC_models<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"(Intercept)"</span>]]) </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>mDIC_kill_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_Kill_13C_PE <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_Kill_13C_PE</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>mDIC_kill_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_Kill_13C_PP <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_Kill_13C_PP</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>mDIC_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_PE <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_PE</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>mDIC_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_PP <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_PE</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>mDIC_SW_background <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_SW_background <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_SW_background</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="total-co2-in-kill-controls" class="level3">
+<h3 class="anchored" data-anchor-id="total-co2-in-kill-controls">Total CO<sub>2</sub> in kill controls</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>kills_total_C <span class="ot">&lt;-</span> kill_c <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mDIC =</span> <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"Kill_13C_PE"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_kill_PE</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"Kill_13C_PP"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_kill_PP</span>(time),<span class="cn">NA</span>))) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_C_umol=</span> CO2_umol <span class="sc">+</span> mDIC)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kills_total_C,"kills_total_c.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater" class="level3">
+<h3 class="anchored" data-anchor-id="total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater">Total CO<sub>2</sub> in 13C-PE incubations, 13C-PP incubations and background seawater</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>experiment_total_C <span class="ot">&lt;-</span> experiment <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mDIC =</span> <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"PE"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_PE</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"PP"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_PP</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"SW_background"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_SW_background</span>(time), <span class="cn">NA</span>)))) <span class="sc">|&gt;</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_C_umol=</span> CO2_umol <span class="sc">+</span> mDIC)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment_total_C,"experiment_total_C.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+</section>
+<section id="nanoplastics-degradation" class="level2">
+<h2 class="anchored" data-anchor-id="nanoplastics-degradation">Nanoplastics degradation</h2>
+<p>To calculate the amounts of <sup>13</sup>C-PE and <sup>13</sup>C-PP degraded, I’ll need to determine the fraction of <sup>13</sup>C in the systems.</p>
+<p>starting from the measured 𝝳<sup>13</sup>C values:</p>
+<p><img src="images/fractionation_image1-01.png" class="img-fluid"></p>
+<p>where <sup>13</sup>F is:</p>
+<p><img src="images/fractionation_image2.png" class="img-fluid"></p>
+<p>vpdb designates the Vienna PeeDee Belemnite isotopic standard. <code>Rvpdb</code> has a set value of <code>0.011179601676131</code>as it is after all a standard.</p>
+<p>the volume added in the incubation bottles of <sup>13</sup>C-PE and <sup>13</sup>C-PP soups is 1.5 ml designated as <code>volume_added_ml</code>.</p>
+<p>The DOC (µM) measured for the ‘soups’ are loaded as <code>PP_DOC_uM</code> and <code>PE_DOC_uM</code>. Then the amount added (µmol) to the incubations is calculated for PP <code>PP_DOC_injected_umol</code> and PE <code>PE_DOC_injected_umol</code> .</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Rvpdb <span class="ot">&lt;-</span> <span class="fl">0.0111796016761313</span> <span class="co">#set value</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>volume_added_ml <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="co">#volume plastic soup added</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>PP_DOC_uM <span class="ot">&lt;-</span> <span class="fl">2290.2</span> <span class="co">#DOC mesured for PP soup</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>PP_DOC_injected_umol <span class="ot">&lt;-</span> (PP_DOC_uM<span class="sc">*</span>(volume_added_ml<span class="sc">/</span><span class="dv">1000</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>PE_DOC_uM <span class="ot">&lt;-</span> <span class="fl">271.9</span> <span class="co">#DOC measured for PE soup</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>PE_DOC_injected_umol <span class="ot">&lt;-</span> (PE_DOC_uM<span class="sc">*</span>(volume_added_ml<span class="sc">/</span><span class="dv">1000</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="seawater-background-13c-fractionation" class="level3">
+<h3 class="anchored" data-anchor-id="seawater-background-13c-fractionation">Seawater background <sup>13</sup>C fractionation</h3>
+<p>This is the first step, as it will be used as baseline to correct the <sup>13</sup>C fraction that is only due to the seawater.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>background <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>((<span class="fu">filter</span>(experiment, incubation <span class="sc">==</span><span class="st">"SW_background"</span>,))<span class="sc">$</span>delta_13C, <span class="at">na.rm =</span> T), <span class="at">digits =</span> <span class="dv">1</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>fract_13C_backgrounnd <span class="ot">&lt;-</span> (Rvpdb<span class="sc">*</span>((background<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((background<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>) </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>perc_fract_13C_backgrounnd <span class="ot">&lt;-</span> fract_13C_backgrounnd<span class="sc">*</span><span class="dv">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="excess-13co2-production-in-kill-controls" class="level3">
+<h3 class="anchored" data-anchor-id="excess-13co2-production-in-kill-controls">excess <sup>13</sup>CO<sub>2</sub> production in kill controls</h3>
+<p>I will calculate the excess <sup>13</sup>CO<sub>2</sub> in the kill controls and calculate the linear regression a model. This is necessary to get the values at all time which will be necessary to get a net excess <sup>13</sup>CO<sub>2</sub> production in the incubations later on in [13C-PE degradation] and [13C-PP degradation].</p>
+<p>the standard deviation of the 𝝳<sup>13</sup>C Seawater background through time is negligible &lt;1. So, the mean (variable <code>background</code>) will be used to correct for the background in all subsequent calculations.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>kill_c_fract <span class="ot">&lt;-</span> kills_total_C <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fract13_CO2 =</span> (Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc)</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> kill_c_fract <span class="sc">|&gt;</span> <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol), <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plot_excess_kills <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> average_excess_kills, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_excess_13CO2_umol, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>incubation)<span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>( <span class="at">color =</span> incubation), <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"average excess 13-co2 in kill controls"</span>, <span class="at">subtitle =</span> <span class="st">"linear regressions"</span>) <span class="sc">+</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>plot_excess_kills  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/excess%20CO2%20kills%20plots-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now, I’ll calculate the linear models for excess <sup>13</sup>CO<sub>2</sub> production in the <sup>13</sup>C-PP kills controls and <sup>13</sup>C-PE kill controls. This production isn’t due to biological processes. These will be used as baseline to correct the excess <sup>13</sup>CO<sub>2</sub> production in the live incubations.</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|label: modelling excess 13C-CO2 kills</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> average_excess_kills <span class="sc">|&gt;</span> </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character),as_factor))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation))) {</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>linear_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(average_excess_13CO2_umol <span class="sc">~</span>time , <span class="at">data =</span> average_excess_kills[average_excess_kills<span class="sc">$</span>incubation <span class="sc">==</span> <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i], ])</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"slope_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"time"</span>]]) </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"intercept_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"(Intercept)"</span>]]) </span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>excess_kill_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PE <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PE</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>excess_kill_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PP <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PP</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="c-pe-degradation" class="level3">
+<h3 class="anchored" data-anchor-id="c-pe-degradation"><sup>13</sup>C-PE degradation</h3>
+<p>I</p>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PE_deg <span class="ot">&lt;-</span> experiment_total_C <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(incubation <span class="sc">==</span><span class="st">"PE"</span>, time <span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fract13_CO2 =</span> (Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc) <span class="sc">|&gt;</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13C_kill_umol =</span> <span class="fu">excess_kill_PE</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Net_excess_13C_umol =</span> excess_13CO2_umol <span class="sc">-</span> excess_13C_kill_umol)</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg,"PE_degradartion.csv")</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>PE_deg_summary <span class="ot">&lt;-</span> PE_deg <span class="sc">|&gt;</span> </span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol),</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol),</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_Net_excess_13C_umol =</span> <span class="fu">mean</span>(Net_excess_13C_umol),</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_Net_excess_13C_umol =</span> <span class="fu">sd</span>(Net_excess_13C_umol)) <span class="sc">|&gt;</span></span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perct_degradation =</span> average_Net_excess_13C_umol<span class="sc">/</span>PE_DOC_injected_umol<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_perct_deg =</span> std_Net_excess_13C_umol<span class="sc">/</span>average_Net_excess_13C_umol<span class="sc">*</span>perct_degradation) <span class="sc">|&gt;</span> </span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg_summary,"PE_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_PE_net <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PE_deg_summary, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_Net_excess_13C_umol)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"darkseagreen3"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>average_Net_excess_13C_umol<span class="sc">-</span>std_Net_excess_13C_umol, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>average_Net_excess_13C_umol<span class="sc">+</span>std_Net_excess_13C_umol),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span>.<span class="dv">2</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(0,1)+</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto 13Co2 production 13C-PE incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>plot_PE_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/PE%20net%20degradation%20plots-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="c-pp-degradation" class="level3">
+<h3 class="anchored" data-anchor-id="c-pp-degradation"><sup>13</sup>C-PP degradation</h3>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PP_deg <span class="ot">&lt;-</span> experiment_total_C <span class="sc">|&gt;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(incubation <span class="sc">==</span><span class="st">"PP"</span>, time <span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fract13_CO2 =</span> (Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc) <span class="sc">|&gt;</span> </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13C_kill_umol =</span> <span class="fu">excess_kill_PP</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Net_excess_13C_umol =</span> (excess_13CO2_umol <span class="sc">-</span> excess_13C_kill_umol)<span class="sc">*</span><span class="dv">3</span>) <span class="co">#the x3 is because only one in every 3 carbon atoms are labelled in the bought 13C-PP powder</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg,"./data_used/PP_degradartion.csv")</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>PP_deg_summary <span class="ot">&lt;-</span> PP_deg <span class="sc">|&gt;</span> </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol),</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_Net_excess_13C_umol =</span> <span class="fu">mean</span>(Net_excess_13C_umol),</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_Net_excess_13C_umol =</span> <span class="fu">sd</span>(Net_excess_13C_umol)) <span class="sc">|&gt;</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perct_degradation =</span> average_Net_excess_13C_umol<span class="sc">/</span>PP_DOC_injected_umol<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_perct_deg =</span> std_Net_excess_13C_umol<span class="sc">/</span>average_Net_excess_13C_umol<span class="sc">*</span>perct_degradation) <span class="sc">|&gt;</span> </span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg_summary,"./data_used/PP_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div class="cell">
+<details open="">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plot_PP_net <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PP_deg_summary, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_Net_excess_13C_umol)) <span class="sc">+</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"cornflowerblue"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>average_Net_excess_13C_umol<span class="sc">-</span>std_Net_excess_13C_umol, </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>average_Net_excess_13C_umol<span class="sc">+</span>std_Net_excess_13C_umol),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span>.<span class="dv">2</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(0,2)+</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto 13Co2 production 13C-PP incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>plot_PP_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/PP%20net%20degradation%20plots-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

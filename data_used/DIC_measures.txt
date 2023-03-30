@@ -1,0 +1,21 @@
+Sample_name	time	incubation	polymer	DIC_uM
+T0-1 SW_background 30-5-22 MA	0	SW_background	SW_background	2271.9
+T0 PE+SW_background 31-5-23 MA	24	PE	PE	2278.8
+T0 PP+SW_background 31-5-24 MA	24	PP	PP	2284.3
+13C PE 1 28-6-22 MA 	696	PE	PE	2388.1
+13C PE 3 28-6-22 MA	696	PE	PE	2382.8
+13C PE 5 28-6-22 MA	696	PE	PE	2396.5
+13C PP 1 28-6-22 MA 	696	PP	PP	2370.9
+13C PP 3 28-6-22 MA	696	PP	PP	2399.2
+13C PP 5 28-6-22 MA	696	PP	PP	2403.8
+SW_background1 28-6-22 MA	696	SW_background	SW_background	2368.1
+SW_background2 28-6-22 MA	696	SW_background	SW_background	2400
+SW_background3 28-6-22 MA	696	SW_background	SW_background	2382.1
+13C-PP-DIC	0	Kill_13C_PP	PP	2070.6
+13C-PP-DIC	0	Kill_13C_PP	PP	2067.2
+13C-PE-DIC	0	Kill_13C_PE	PE	2027.8
+13C-PE-DIC	0	Kill_13C_PE	PE	2025.1
+13CPP-DIC-final	768	Kill_13C_PP	PP	2080.7
+13CPP-DIC-final	768	Kill_13C_PP	PP	2079.1
+13CPE-DIC final	768	Kill_13C_PE	PE	2052.5
+13CPE-DIC final	768	Kill_13C_PE	PE	2046

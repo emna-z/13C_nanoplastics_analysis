@@ -1,0 +1,516 @@
+---
+title: "13C_nanoplastics_degradation_analysis"
+author: "E. ZEGHAL"
+date-modified: "Last compiled on `r format(Sys.time(), '%d %B, %Y')`"
+format: 
+  html:
+    html-math-method: katex
+    toc: true
+    toc-location: left
+    toc-float: true
+    toc-depth: 5
+    code-fold: show  
+    highlight-style: a11y-dark
+theme:
+  light: flatly
+  dark: darkly
+execute:
+  warning: false
+editor: visual
+---
+
+```{r}
+#| label: loading libraries
+library(tidyverse)
+# install.packages("ggpmisc")
+library("ggpmisc")
+```
+
+## CO~2~ in head-space
+
+### compute calibration curves
+
+First, I compute calibration curves linear regression models. Then, I use those equation to transform the areas under CO~2~ peaks (obtained from GC-FID) into CO~2~ ppm. Since the CO~2~ measurements were made in two separate sets. I end up with two different calibration curves.
+
+#### **First set of samples**
+
+```{r}
+#| label: linear regression calibration curve experiment
+#| results: hide
+#| warning: false	
+
+calib_1 <- read_delim("./data_used/calibration_curve_GC-FID_Mishal.txt")
+
+linear_reg_1 <- lm(ppm ~ 0 + area, data = calib_1 ) # the"+0" forces intercept through 0
+slope_1 <- linear_reg_1$coefficients
+```
+
+```{r calib_curve_1 plot}
+#| warning: false
+
+calib_curve_1 <- ggplot(data = calib_1, aes(x = area, y = ppm)) +
+  geom_smooth(method = "lm",formula = y ~ x + 0, se = F, color = "black", size = 1, linetype = 5) +
+  # stat_poly_line(formula = y ~ x + 0) +
+  stat_poly_eq(formula = y ~ x + 0, aes(label = after_stat(eq.label)), coef.digits = 7, size= 5) +
+  geom_point(color = "cadetblue", size = 3)+
+  theme_minimal()+
+  ggtitle("calibration curve for CO2 PP, PE and background", subtitle = "Mishal - June 2022") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+calib_curve_1
+```
+
+#### **Second set of samples (Kill controls)**
+
+```{r results='hide', warning=FALSE}
+#| label: linear regression kill controls
+
+calib_2 <- read_delim("./data_used/calibration_curve_kill_controls.txt")
+linear_reg_2 <- lm(ppm ~ 0 + area, data = calib_2 )
+slope_2 <- linear_reg_2$coefficients
+
+```
+
+```{r calib_curve_2 plot, echo=FALSE}
+calib_curve_2 <- ggplot(data = calib_2, aes(x = area, y = ppm)) +
+  geom_smooth(method = "lm",formula = y ~ x + 0, se = F, color = "black", size = 1, linetype = 5) +
+  # stat_poly_line(formula = y ~ x + 0) +
+  stat_poly_eq(formula = y ~ x + 0, aes(label = after_stat(eq.label)), coef.digits = 7, size= 5) +
+  geom_point(color = "gold2", size = 3)+
+  theme_minimal()+
+  ggtitle("calibration curve for CO2 repeat kill controls", subtitle = "Rachel - Nov 2022")+
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+calib_curve_2
+
+```
+
+### Concentration of CO~2~ in head-spaces in ppms, amounts in mmol and µmol
+
+I'll use the calibration curves equations to calculate the ppm of CO~2~ in the head-spaces `CO2_ppm = co2_area * slope`. Then, from the concentration in (ppm), I determine the volume in (ml) `CO2_HS_ml = HS_ml/1000000*CO2_ppm` . After that, using the ideal gas law, I calculate the amount of CO~2~ in (mmol) `CO2_mmol = ((pressure_bar+delta_pressure)*CO2_HS_ml)/(0.083145*(273.15+T_C))`. Finally I convert to (µmol).
+
+In this experiment, all incubations were left in a temperature controlled room at 22ºC, the difference in pressure `delta_pressure` was negligible (3 digits after 0). so we set that value to `0`.
+
+------------------------------------------------------------------------
+
+***Reminder:***
+
+Ideal gas law: $PV=nRT$
+
+If
+
+-   the pressure $P$ is in atmospheres (atm),
+
+-   the volume $V$ is in liters (L),
+
+-   the moles $n$ is in moles (mol),
+
+-   and temperature $T$ is in Kelvin (K)
+
+Then $R$ is in $L⋅atm/mol⋅K.R$ has the value $0.082057 L⋅atm/mol⋅K$ with the above units for the rest of variables.
+
+In other scenarios with pressure in (bar) instead, one may also use $0.083145 L⋅bar/mol⋅K$.
+
+However, temperature is always in Kelvin (K), as $R$ uses units of $K$
+
+------------------------------------------------------------------------
+
+#### kill controls
+
+```{r, warning=FALSE, results='hide'}
+#| label: CO2 HS kill controls
+
+kill_c <- read_delim("./data_used/kill_controls.txt")
+
+kill_c <- kill_c |>
+  mutate(CO2_ppm = co2_area * slope_2) |> 
+  mutate(CO2_HS_ml = HS_ml/1000000*CO2_ppm) |> 
+  mutate(CO2_mmol = ((pressure_bar+delta_pressure)*CO2_HS_ml)/(0.083145*(273.15+T_C))) |> 
+  mutate(CO2_umol = CO2_mmol*1000)
+  
+# write_csv(kill_c, "./data_used/kill_controls_calc1.csv")
+```
+
+let's calculate the averages for each incubation time and type.
+
+```{r, results='hide', warning=FALSE}
+#| label: summary kill controls CO2
+
+kills_summary <- kill_c|>
+  group_by(incubation, time ) |> 
+  summarise(average_CO2_mmol = mean(CO2_mmol), std_CO2_mmol = sd(CO2_mmol),
+            average_CO2_umol = mean(CO2_umol), std_CO2_umol = sd(CO2_umol),
+            average_delta_13c = mean(delta_13C), std_delta_13c = sd(delta_13C))|> 
+  ungroup() #ungroup() needed to later convert chr to fct
+
+# write_csv(kills_summary, "./data_used/kill_controls_summary.csv")
+```
+
+#### 13C-PE incubations, 13C-PP incubations and background seawater
+
+```{r, warning=FALSE, results='hide'}
+#| label: CO2 HS ppm in 13C-PE incubations, 13C-PP incubations and background seawater
+
+experiment <- read_csv("./data_used/polymers_incubations.csv")
+
+experiment <- experiment |>
+  mutate(CO2_ppm = co2_area * slope_1) |> 
+  mutate(CO2_HS_ml = HS_ml/1000000*CO2_ppm) |> 
+  mutate(CO2_mmol = ((pressure_bar+delta_pressure)*CO2_HS_ml)/(0.083145*(273.15+T_C))) |> 
+  mutate(CO2_umol = CO2_mmol*1000)
+  
+# write_csv(experiment, "../data_used/polymers_incubations_calc1.csv")
+```
+
+let's calculate the averages for each incubation time and type.
+
+```{r, results='hide', warning=FALSE}
+#| label: summary CO2 HS in 13C-PE incubations, 13C-PP incubations and background seawater
+
+experiment_summary <- experiment|>
+  group_by(incubation, time ) |> 
+  summarise(average_CO2_mmol = mean(CO2_mmol), std_CO2_mmol = sd(CO2_mmol),
+            average_CO2_umol = mean(CO2_umol), std_CO2_umol = sd(CO2_umol),
+            average_delta_13c = mean(delta_13C, na.rm = T), std_delta_13c = sd(delta_13C, na.rm =T) ) |> 
+  ungroup()
+experiment_summary
+
+# write_csv(experiment_summary, "./data_used/polymers_incubations_summary.csv")
+```
+
+## Total CO~2~ in systems
+
+one of the variable I'll need later is the liquid phase volume in liter, which is 150 (ml) in my experiment. Here I upload it as `liquid_L <- 0.15` .
+
+```{r, results='hide', warning=FALSE, echo=FALSE}
+#| label: liquid phase volume variable in (litre)
+liquid_L <- 0.15
+```
+
+### DIC modelisation
+
+In order to calculate total CO2 amounts. the amount of CO2 in the liquid phase need to be added to the values calculated for the headspace in \[CO2 in head-space\].
+
+One of the issues encountered here is that it wasn't possible to sub-sample for DIC measurements in each timepoint. (we are following CO2 production here so opening up our bottles isn't an option). what I have is DIC measurements at the beginning and the end of the experiment. as CO2 production followed a linear trend, I'll assume the same for DIC. So now I'll calculate the linear regression for the evolution of CO2 in the liquid phase for each type incubation
+
+```{r DIC_models, warning=FALSE, results='hide'}
+
+DIC_tab <- read_delim("./data_used/DIC_measures.txt")
+
+DIC_summary <- DIC_tab |> 
+  group_by(incubation,time) |> 
+  summarise(average_DIC_uM = mean(DIC_uM), std_DIC_uM = sd(DIC_uM)) |> 
+  mutate(DIC_L_Phase = average_DIC_uM*liquid_L)
+
+Co2_HS <- rbind((experiment_summary |> select(incubation, time, average_CO2_umol)),
+      (kills_summary |> select(incubation, time, average_CO2_umol)))
+
+DIC_models <- left_join(DIC_summary, Co2_HS) |> #Joining with `by = join_by(incubation, time)`
+  mutate(ratio = average_CO2_umol/DIC_L_Phase)|> 
+  ungroup()
+DIC_models$std_DIC_uM <- NULL
+
+
+# write_csv(DIC_models, "./data_used/DIC_models.csv")
+
+```
+
+```{r, warning=FALSE, results='hide'}
+#|label: DIC models plots
+safe <- c ("#CC6677", "#DDCC77","#88CCEE" ,"#661100", "#117733", 
+                    "#332288", "#44AA99", "#882255", 
+                    "#6699CC", "#999933", "#888888","#AA4499" ) #palette
+
+
+models_DIC_plot <- ggplot(data = DIC_models, aes(x = time, y = ratio, group = incubation)) +
+  facet_grid(~incubation)+
+  geom_point( aes(shape = incubation, color = incubation), size = 3)+
+  scale_color_manual(values=  safe)+
+  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
+  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 2) +
+  theme_minimal()+
+  ylim(0,0.015)+
+  ggtitle("DIC linear regressions", subtitle = "") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"),
+        legend.position="bottom" )
+
+ 
+models_DIC_plot 
+```
+
+```{r, results='hide', warning=FALSE}
+#| label: getting DIC models equations
+
+DIC_models <- DIC_models |> 
+  mutate(across(where(is_character),as_factor))
+
+for (i in 1:length(levels(DIC_models$incubation))) {
+  
+linear_reg <- lm(ratio ~time , data = DIC_models[DIC_models$incubation == levels(DIC_models$incubation)[i], ])
+
+assign(paste0("slope_linear_reg_", levels(DIC_models$incubation)[i]),
+       linear_reg$coefficients[["time"]]) 
+assign(paste0("intercept_linear_reg_", levels(DIC_models$incubation)[i]),
+       linear_reg$coefficients[["(Intercept)"]]) 
+}
+
+mDIC_kill_PE <- function(x) intercept_linear_reg_Kill_13C_PE + x * slope_linear_reg_Kill_13C_PE
+mDIC_kill_PP <- function(x) intercept_linear_reg_Kill_13C_PP + x * slope_linear_reg_Kill_13C_PP
+mDIC_PE <- function(x) intercept_linear_reg_PE + x * slope_linear_reg_PE
+mDIC_PP <- function(x) intercept_linear_reg_PP + x * slope_linear_reg_PE
+mDIC_SW_background <- function(x) intercept_linear_reg_SW_background + x * slope_linear_reg_SW_background
+```
+
+### Total CO~2~ in kill controls
+
+```{r, results='hide', warning=FALSE}
+#| label: total C kill controls
+
+kills_total_C <- kill_c |> 
+  mutate(mDIC = if_else(incubation == "Kill_13C_PE", CO2_umol/mDIC_kill_PE(time), if_else(incubation == "Kill_13C_PP", CO2_umol/mDIC_kill_PP(time),NA))) |> 
+  mutate(total_C_umol= CO2_umol + mDIC)
+# write_csv(kills_total_C,"kills_total_c.csv")
+```
+
+### Total CO~2~ in 13C-PE incubations, 13C-PP incubations and background seawater
+
+```{r, results='hide', warning=FALSE}
+#| label: total C 13C-PE incubations, 13C-PP incubations and background seawater
+
+experiment_total_C <- experiment |> 
+  mutate(mDIC = if_else(incubation == "PE", CO2_umol/mDIC_PE(time), if_else(incubation == "PP", CO2_umol/mDIC_PP(time), if_else(incubation == "SW_background", CO2_umol/mDIC_SW_background(time), NA)))) |> 
+  mutate(total_C_umol= CO2_umol + mDIC)
+# write_csv(experiment_total_C,"experiment_total_C.csv")
+```
+
+## Nanoplastics degradation
+
+To calculate the amounts of ^13^C-PE and ^13^C-PP degraded, I'll need to determine the fraction of ^13^C in the systems.
+
+starting from the measured 𝝳^13^C values:
+
+![](images/fractionation_image1-01.png)
+
+where ^13^F is:
+
+![](images/fractionation_image2.png)
+
+vpdb designates the Vienna PeeDee Belemnite isotopic standard. `Rvpdb` has a set value of `0.011179601676131`as it is after all a standard.
+
+the volume added in the incubation bottles of ^13^C-PE and ^13^C-PP soups is 1.5 ml designated as `volume_added_ml`.
+
+The DOC (µM) measured for the 'soups' are loaded as `PP_DOC_uM` and `PE_DOC_uM`. Then the amount added (µmol) to the incubations is calculated for PP `PP_DOC_injected_umol` and PE `PE_DOC_injected_umol` .
+
+```{r}
+#| label: variable necessary for degradation calculations
+
+Rvpdb <- 0.0111796016761313 #set value
+
+volume_added_ml <- 1.5 #volume plastic soup added
+
+PP_DOC_uM <- 2290.2 #DOC mesured for PP soup
+PP_DOC_injected_umol <- (PP_DOC_uM*(volume_added_ml/1000))
+
+PE_DOC_uM <- 271.9 #DOC measured for PE soup
+PE_DOC_injected_umol <- (PE_DOC_uM*(volume_added_ml/1000))
+
+```
+
+### Seawater background ^13^C fractionation
+
+This is the first step, as it will be used as baseline to correct the ^13^C fraction that is only due to the seawater.
+
+```{r, results='hide', warning=FALSE}
+#| label: background 13C fraction
+
+background <- round(mean((filter(experiment, incubation =="SW_background",))$delta_13C, na.rm = T), digits = 1)
+
+fract_13C_backgrounnd <- (Rvpdb*((background/(1000)+1)))/((Rvpdb*((background/(1000)+1)))+1) 
+perc_fract_13C_backgrounnd <- fract_13C_backgrounnd*100
+```
+
+### excess ^13^CO~2~ production in kill controls
+
+I will calculate the excess ^13^CO~2~ in the kill controls and calculate the linear regression a model. This is necessary to get the values at all time which will be necessary to get a net excess ^13^CO~2~ production in the incubations later on in \[13C-PE degradation\] and \[13C-PP degradation\].
+
+the standard deviation of the 𝝳^13^C Seawater background through time is negligible \<1. So, the mean (variable `background`) will be used to correct for the background in all subsequent calculations.
+
+```{r, results='hide', warning=FALSE}
+#| label: excess CO2 kills
+
+kill_c_fract <- kills_total_C |> 
+  select(incubation, time, total_C_umol, delta_13C) |> 
+  mutate(Fract13_CO2 = (Rvpdb*((delta_13C/(1000)+1)))/((Rvpdb*((delta_13C/(1000)+1)))+1)) |> 
+  mutate(perc_13C = Fract13_CO2*100) |> 
+  mutate(D13C_CO2_perc = perc_13C - perc_fract_13C_backgrounnd) |> 
+  mutate(excess_13CO2_umol = total_C_umol/100*D13C_CO2_perc)
+  
+average_excess_kills <- kill_c_fract |> group_by(incubation,time) |> 
+  summarise(average_excess_13CO2_umol = mean(excess_13CO2_umol), std_excess_13CO2_umol = sd(excess_13CO2_umol)) |> 
+  ungroup()
+  
+
+```
+
+```{r, warning=FALSE, results='hide'}
+#| label: excess CO2 kills plots
+
+plot_excess_kills <- ggplot(data = average_excess_kills, aes(x = time, y = average_excess_13CO2_umol, group = incubation)) +
+  facet_grid(~incubation)+
+  geom_point( aes( color = incubation), size = 3)+
+  scale_color_manual(values=  safe)+
+  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
+  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+  theme_minimal()+
+  ylim(0,1)+
+  ggtitle("average excess 13-co2 in kill controls", subtitle = "linear regressions") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"),
+        legend.position = "top")
+
+plot_excess_kills  
+
+```
+
+Now, I'll calculate the linear models for excess ^13^CO~2~ production in the ^13^C-PP kills controls and ^13^C-PE kill controls. This production isn't due to biological processes. These will be used as baseline to correct the excess ^13^CO~2~ production in the live incubations.
+
+```{r}
+#|label: modelling excess 13C-CO2 kills
+  
+average_excess_kills <- average_excess_kills |> 
+  mutate(across(where(is_character),as_factor))
+
+
+for (i in 1:length(levels(average_excess_kills$incubation))) {
+  
+linear_reg <- lm(average_excess_13CO2_umol ~time , data = average_excess_kills[average_excess_kills$incubation == levels(average_excess_kills$incubation)[i], ])
+
+assign(paste0("slope_", levels(average_excess_kills$incubation)[i]),
+       linear_reg$coefficients[["time"]]) 
+assign(paste0("intercept_", levels(average_excess_kills$incubation)[i]),
+       linear_reg$coefficients[["(Intercept)"]]) 
+}
+
+excess_kill_PE <- function(x) intercept_Kill_13C_PE + x * slope_Kill_13C_PE
+excess_kill_PP <- function(x) intercept_Kill_13C_PP + x * slope_Kill_13C_PP
+```
+
+### ^13^C-PE degradation
+
+I
+
+```{r, warning=FALSE}
+#| label: degradation 13C-PE
+
+PE_deg <- experiment_total_C |> 
+  filter(incubation =="PE", time >0) |> 
+  select(incubation, time, total_C_umol, delta_13C) |> 
+  drop_na() |> 
+  mutate(Fract13_CO2 = (Rvpdb*((delta_13C/(1000)+1)))/((Rvpdb*((delta_13C/(1000)+1)))+1)) |> 
+  mutate(perc_13C = Fract13_CO2*100) |> 
+  mutate(D13C_CO2_perc = perc_13C - perc_fract_13C_backgrounnd) |> 
+  mutate(excess_13CO2_umol = total_C_umol/100*D13C_CO2_perc) |> 
+  mutate(excess_13C_kill_umol = excess_kill_PE(time)) |> 
+  mutate(Net_excess_13C_umol = excess_13CO2_umol - excess_13C_kill_umol)
+
+# write_csv(PE_deg,"PE_degradartion.csv")
+  
+PE_deg_summary <- PE_deg |> 
+  group_by(incubation,time) |> 
+  summarise(average_excess_13CO2_umol = mean(excess_13CO2_umol),
+            std_excess_13CO2_umol = sd(excess_13CO2_umol),
+            average_Net_excess_13C_umol = mean(Net_excess_13C_umol),
+            std_Net_excess_13C_umol = sd(Net_excess_13C_umol)) |>
+  mutate(perct_degradation = average_Net_excess_13C_umol/PE_DOC_injected_umol*100) |> 
+  mutate(sd_perct_deg = std_Net_excess_13C_umol/average_Net_excess_13C_umol*perct_degradation) |> 
+  ungroup()
+
+# write_csv(PE_deg_summary,"PE_degradartion_summary.csv")
+```
+
+```{r, warning=FALSE, results='hide'}
+#| label: PE net degradation plots
+
+plot_PE_net <- ggplot(data = PE_deg_summary, aes(x = time, y = average_Net_excess_13C_umol)) +
+  geom_point( color = "darkseagreen3", size = 3)+
+  geom_errorbar(aes(ymin=average_Net_excess_13C_umol-std_Net_excess_13C_umol, 
+                    ymax=average_Net_excess_13C_umol+std_Net_excess_13C_umol),
+                width=.2, position=position_dodge(0.05))+
+  scale_color_manual(values=  safe)+
+  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
+  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+  theme_minimal()+
+  # ylim(0,1)+
+  ggtitle("neto 13Co2 production 13C-PE incubations", subtitle = "") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+
+plot_PE_net  
+
+```
+
+### ^13^C-PP degradation
+
+```{r, warning = FALSE}
+#| label: degradation 13C-PP
+
+PP_deg <- experiment_total_C |> 
+  filter(incubation =="PP", time >0) |> 
+  select(incubation, time, total_C_umol, delta_13C) |> 
+  drop_na() |> 
+  mutate(Fract13_CO2 = (Rvpdb*((delta_13C/(1000)+1)))/((Rvpdb*((delta_13C/(1000)+1)))+1)) |> 
+  mutate(perc_13C = Fract13_CO2*100) |> 
+  mutate(D13C_CO2_perc = perc_13C - perc_fract_13C_backgrounnd) |> 
+  mutate(excess_13CO2_umol = total_C_umol/100*D13C_CO2_perc) |> 
+  mutate(excess_13C_kill_umol = excess_kill_PP(time)) |> 
+  mutate(Net_excess_13C_umol = (excess_13CO2_umol - excess_13C_kill_umol)*3) #the x3 is because only one in every 3 carbon atoms are labelled in the bought 13C-PP powder
+
+# write_csv(PP_deg,"./data_used/PP_degradartion.csv")
+  
+
+PP_deg_summary <- PP_deg |> 
+  group_by(incubation,time) |> 
+  summarise(average_excess_13CO2_umol = mean(excess_13CO2_umol),
+            std_excess_13CO2_umol = sd(excess_13CO2_umol),
+            average_Net_excess_13C_umol = mean(Net_excess_13C_umol),
+            std_Net_excess_13C_umol = sd(Net_excess_13C_umol)) |>
+  mutate(perct_degradation = average_Net_excess_13C_umol/PP_DOC_injected_umol*100) |> 
+  mutate(sd_perct_deg = std_Net_excess_13C_umol/average_Net_excess_13C_umol*perct_degradation) |> 
+  ungroup()
+
+# write_csv(PP_deg_summary,"./data_used/PP_degradartion_summary.csv")
+```
+
+```{r, warning=FALSE, results='hide'}
+#| label: PP net degradation plots
+
+plot_PP_net <- ggplot(data = PP_deg_summary, aes(x = time, y = average_Net_excess_13C_umol)) +
+  geom_point( color = "cornflowerblue", size = 3)+
+  geom_errorbar(aes(ymin=average_Net_excess_13C_umol-std_Net_excess_13C_umol, 
+                    ymax=average_Net_excess_13C_umol+std_Net_excess_13C_umol),
+                width=.2, position=position_dodge(0.05))+
+  scale_color_manual(values=  safe)+
+  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
+  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+  theme_minimal()+
+  # ylim(0,2)+
+  ggtitle("neto 13Co2 production 13C-PP incubations", subtitle = "") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+
+plot_PP_net  
+
+```

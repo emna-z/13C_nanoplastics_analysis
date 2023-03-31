@@ -8,7 +8,7 @@
 
 <meta name="author" content="E. ZEGHAL">
 
-<title>13C_nanoplastics_degradation_analysis</title>
+<title>¹³C nanoplastics degradation analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -100,6 +100,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <link href="documentation_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="documentation_files/libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 
+<script src="documentation_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="documentation_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+
   <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
@@ -162,7 +165,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">13C_nanoplastics_degradation_analysis</h1>
+<h1 class="title">¹³C nanoplastics degradation analysis</h1>
 </div>
 
 
@@ -180,7 +183,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">March 30, 2023</p>
+      <p class="date-modified">March 31, 2023</p>
     </div>
   </div>
     
@@ -190,11 +193,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </header>
 
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("ggpmisc")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggpmisc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"ggpmisc"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages("kableExtra")</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"kableExtra"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <section id="co2-in-head-space" class="level2">
@@ -205,7 +210,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="first-set-of-samples" class="level4">
 <h4 class="anchored" data-anchor-id="first-set-of-samples"><strong>First set of samples</strong></h4>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>calib_1 <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/calibration_curve_GC-FID_Mishal.txt"</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -214,20 +219,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </details>
 </div>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>calib_curve_1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> calib_1, <span class="fu">aes</span>(<span class="at">x =</span> area, <span class="at">y =</span> ppm)) <span class="sc">+</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="dv">0</span>, <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># stat_poly_line(formula = y ~ x + 0) +</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="dv">0</span>, <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">7</span>, <span class="at">size=</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cadetblue"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"calibration curve for CO2 PP, PE and background"</span>, <span class="at">subtitle =</span> <span class="st">"Mishal - June 2022"</span>) <span class="sc">+</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>calib_curve_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x <span class="sc">+</span> <span class="dv">0</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">7</span>,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">label.y =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"cadetblue"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"calibration curve for CO2 PP, PE and background"</span>, <span class="at">subtitle =</span> <span class="st">"Mishal - June 2022"</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>calib_curve_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="documentation_files/figure-html/calib_curve_1%20plot-1.png" class="img-fluid" width="672"></p>
@@ -237,7 +247,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="second-set-of-samples-kill-controls" class="level4">
 <h4 class="anchored" data-anchor-id="second-set-of-samples-kill-controls"><strong>Second set of samples (Kill controls)</strong></h4>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>calib_2 <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/calibration_curve_kill_controls.txt"</span>)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>linear_reg_2 <span class="ot">&lt;-</span> <span class="fu">lm</span>(ppm <span class="sc">~</span> <span class="dv">0</span> <span class="sc">+</span> area, <span class="at">data =</span> calib_2 )</span>
@@ -272,7 +282,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="kill-controls" class="level4">
 <h4 class="anchored" data-anchor-id="kill-controls">kill controls</h4>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>kill_c <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/kill_controls.txt"</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -287,7 +297,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>let’s calculate the averages for each incubation time and type.</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>kills_summary <span class="ot">&lt;-</span> kill_c<span class="sc">|&gt;</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation, time ) <span class="sc">|&gt;</span> </span>
@@ -303,7 +313,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="c-pe-incubations-13c-pp-incubations-and-background-seawater" class="level4">
 <h4 class="anchored" data-anchor-id="c-pe-incubations-13c-pp-incubations-and-background-seawater">13C-PE incubations, 13C-PP incubations and background seawater</h4>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>experiment <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"./data_used/polymers_incubations.csv"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -313,12 +323,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_mmol =</span> ((pressure_bar<span class="sc">+</span>delta_pressure)<span class="sc">*</span>CO2_HS_ml)<span class="sc">/</span>(<span class="fl">0.083145</span><span class="sc">*</span>(<span class="fl">273.15</span><span class="sc">+</span>T_C))) <span class="sc">|&gt;</span> </span>
 <span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">CO2_umol =</span> CO2_mmol<span class="sc">*</span><span class="dv">1000</span>)</span>
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment, "../data_used/polymers_incubations_calc1.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment, "./data_used/polymers_incubations_calc1.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <p>let’s calculate the averages for each incubation time and type.</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>experiment_summary <span class="ot">&lt;-</span> experiment<span class="sc">|&gt;</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation, time ) <span class="sc">|&gt;</span> </span>
@@ -344,8 +354,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="dic-modelisation">DIC modelisation</h3>
 <p>In order to calculate total CO2 amounts. the amount of CO2 in the liquid phase need to be added to the values calculated for the headspace in [CO2 in head-space].</p>
 <p>One of the issues encountered here is that it wasn’t possible to sub-sample for DIC measurements in each timepoint. (we are following CO2 production here so opening up our bottles isn’t an option). what I have is DIC measurements at the beginning and the end of the experiment. as CO2 production followed a linear trend, I’ll assume the same for DIC. So now I’ll calculate the linear regression for the evolution of CO2 in the liquid phase for each type incubation</p>
+<ul>
+<li><strong>join all DIC data and get averages</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>DIC_tab <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">"./data_used/DIC_measures.txt"</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -366,39 +379,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(DIC_models, "./data_used/DIC_models.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<ul>
+<li><strong>DIC models plots</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|label: DIC models plots</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>safe <span class="ot">&lt;-</span> <span class="fu">c</span> (<span class="st">"#CC6677"</span>, <span class="st">"#DDCC77"</span>,<span class="st">"#88CCEE"</span> ,<span class="st">"#661100"</span>, <span class="st">"#117733"</span>, </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#332288"</span>, <span class="st">"#44AA99"</span>, <span class="st">"#882255"</span>, </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#6699CC"</span>, <span class="st">"#999933"</span>, <span class="st">"#888888"</span>,<span class="st">"#AA4499"</span> ) <span class="co">#palette</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>safe <span class="ot">&lt;-</span> <span class="fu">c</span> (<span class="st">"#CC6677"</span>, <span class="st">"#DDCC77"</span>,<span class="st">"#88CCEE"</span> ,<span class="st">"#661100"</span>, <span class="st">"#117733"</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#332288"</span>, <span class="st">"#44AA99"</span>, <span class="st">"#882255"</span>, </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">"#6699CC"</span>, <span class="st">"#999933"</span>, <span class="st">"#888888"</span>,<span class="st">"#AA4499"</span> ) <span class="co">#palette</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>models_DIC_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> DIC_models, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> ratio, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>models_DIC_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> DIC_models, </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                          <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> ratio, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>incubation)<span class="sc">+</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>(<span class="at">shape =</span> incubation, <span class="at">color =</span> incubation), <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)<span class="sc">+</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"DIC linear regressions"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span> )</span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>models_DIC_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>(<span class="at">shape =</span> incubation, <span class="at">color =</span> incubation),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F, </span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)), </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>,</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.015</span>)<span class="sc">+</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"DIC linear regressions"</span>,</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">"bottom"</span> )</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>models_DIC_plot </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="documentation_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+<p><img src="documentation_files/figure-html/DIC%20models%20plots-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<ul>
+<li><strong>Getting DIC models equations</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>DIC_models <span class="ot">&lt;-</span> DIC_models <span class="sc">|&gt;</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character),as_factor))</span>
@@ -416,7 +446,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>mDIC_kill_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_Kill_13C_PE <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_Kill_13C_PE</span>
 <span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>mDIC_kill_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_Kill_13C_PP <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_Kill_13C_PP</span>
 <span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>mDIC_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_PE <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_PE</span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>mDIC_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_PP <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_PE</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>mDIC_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_PP <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_PP</span>
 <span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>mDIC_SW_background <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_linear_reg_SW_background <span class="sc">+</span> x <span class="sc">*</span> slope_linear_reg_SW_background</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -424,24 +454,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="total-co2-in-kill-controls" class="level3">
 <h3 class="anchored" data-anchor-id="total-co2-in-kill-controls">Total CO<sub>2</sub> in kill controls</h3>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>kills_total_C <span class="ot">&lt;-</span> kill_c <span class="sc">|&gt;</span> </span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mDIC =</span> <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"Kill_13C_PE"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_kill_PE</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"Kill_13C_PP"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_kill_PP</span>(time),<span class="cn">NA</span>))) <span class="sc">|&gt;</span> </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_C_umol=</span> CO2_umol <span class="sc">+</span> mDIC)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kills_total_C,"kills_total_c.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kills_total_C,"./data_used/kills_total_c.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater" class="level3">
 <h3 class="anchored" data-anchor-id="total-co2-in-13c-pe-incubations-13c-pp-incubations-and-background-seawater">Total CO<sub>2</sub> in 13C-PE incubations, 13C-PP incubations and background seawater</h3>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>experiment_total_C <span class="ot">&lt;-</span> experiment <span class="sc">|&gt;</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mDIC =</span> <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"PE"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_PE</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"PP"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_PP</span>(time), <span class="fu">if_else</span>(incubation <span class="sc">==</span> <span class="st">"SW_background"</span>, CO2_umol<span class="sc">/</span><span class="fu">mDIC_SW_background</span>(time), <span class="cn">NA</span>)))) <span class="sc">|&gt;</span> </span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">total_C_umol=</span> CO2_umol <span class="sc">+</span> mDIC)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment_total_C,"experiment_total_C.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(experiment_total_C,"./data_used/experiment_total_C.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -457,7 +487,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>the volume added in the incubation bottles of <sup>13</sup>C-PE and <sup>13</sup>C-PP soups is 1.5 ml designated as <code>volume_added_ml</code>.</p>
 <p>The DOC (µM) measured for the ‘soups’ are loaded as <code>PP_DOC_uM</code> and <code>PE_DOC_uM</code>. Then the amount added (µmol) to the incubations is calculated for PP <code>PP_DOC_injected_umol</code> and PE <code>PE_DOC_injected_umol</code> .</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>Rvpdb <span class="ot">&lt;-</span> <span class="fl">0.0111796016761313</span> <span class="co">#set value</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -474,7 +504,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3 class="anchored" data-anchor-id="seawater-background-13c-fractionation">Seawater background <sup>13</sup>C fractionation</h3>
 <p>This is the first step, as it will be used as baseline to correct the <sup>13</sup>C fraction that is only due to the seawater.</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>background <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>((<span class="fu">filter</span>(experiment, incubation <span class="sc">==</span><span class="st">"SW_background"</span>,))<span class="sc">$</span>delta_13C, <span class="at">na.rm =</span> T), <span class="at">digits =</span> <span class="dv">1</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -488,7 +518,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>I will calculate the excess <sup>13</sup>CO<sub>2</sub> in the kill controls and calculate the linear regression a model. This is necessary to get the values at all time which will be necessary to get a net excess <sup>13</sup>CO<sub>2</sub> production in the incubations later on in [13C-PE degradation] and [13C-PP degradation].</p>
 <p>the standard deviation of the 𝝳<sup>13</sup>C Seawater background through time is negligible &lt;1. So, the mean (variable <code>background</code>) will be used to correct for the background in all subsequent calculations.</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>kill_c_fract <span class="ot">&lt;-</span> kills_total_C <span class="sc">|&gt;</span> </span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
@@ -496,31 +526,51 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> kill_c_fract <span class="sc">|&gt;</span> <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol), <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol)) <span class="sc">|&gt;</span> </span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(kill_c_fract,"./data_used/kill_c_fract.csv")</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> kill_c_fract <span class="sc">|&gt;</span> </span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol)) <span class="sc">|&gt;</span> </span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(average_excess_kills,"./data_used/average_excess_kills.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
+<ul>
+<li><strong>Excess CO2 kills plots</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plot_excess_kills <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> average_excess_kills, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_excess_13CO2_umol, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>incubation)<span class="sc">+</span></span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>( <span class="at">color =</span> incubation), <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"average excess 13-co2 in kill controls"</span>, <span class="at">subtitle =</span> <span class="st">"linear regressions"</span>) <span class="sc">+</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>plot_excess_kills  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>plot_excess_kills <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> average_excess_kills, </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_excess_13CO2_umol, <span class="at">group =</span> incubation)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>incubation)<span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="fu">aes</span>( <span class="at">color =</span> incubation), </span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span>  <span class="fu">c</span>(<span class="st">"#F0D23C"</span>, <span class="st">"#433CF0"</span>))<span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), </span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>, </span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"average excess 13-co2 in kill controls"</span>, </span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>          <span class="at">subtitle =</span> <span class="st">"linear regressions"</span>) <span class="sc">+</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>plot_excess_kills  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <p><img src="documentation_files/figure-html/excess%20CO2%20kills%20plots-1.png" class="img-fluid" width="672"></p>
@@ -528,34 +578,35 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Now, I’ll calculate the linear models for excess <sup>13</sup>CO<sub>2</sub> production in the <sup>13</sup>C-PP kills controls and <sup>13</sup>C-PE kill controls. This production isn’t due to biological processes. These will be used as baseline to correct the excess <sup>13</sup>CO<sub>2</sub> production in the live incubations.</p>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#|label: modelling excess 13C-CO2 kills</span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> average_excess_kills <span class="sc">|&gt;</span> </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character),as_factor))</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation))) {</span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>linear_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(average_excess_13CO2_umol <span class="sc">~</span>time , <span class="at">data =</span> average_excess_kills[average_excess_kills<span class="sc">$</span>incubation <span class="sc">==</span> <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i], ])</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"slope_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"time"</span>]]) </span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"intercept_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"(Intercept)"</span>]]) </span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>excess_kill_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PE <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PE</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>excess_kill_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PP <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PP</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>average_excess_kills <span class="ot">&lt;-</span> average_excess_kills <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is_character),as_factor))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(<span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation))) {</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>linear_reg <span class="ot">&lt;-</span> <span class="fu">lm</span>(average_excess_13CO2_umol <span class="sc">~</span>time , </span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> average_excess_kills[average_excess_kills<span class="sc">$</span>incubation <span class="sc">==</span> <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i], ])</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"slope_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"time"</span>]]) </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">assign</span>(<span class="fu">paste0</span>(<span class="st">"intercept_"</span>, <span class="fu">levels</span>(average_excess_kills<span class="sc">$</span>incubation)[i]),</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>       linear_reg<span class="sc">$</span>coefficients[[<span class="st">"(Intercept)"</span>]]) </span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>excess_kill_PE <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PE <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PE</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>excess_kill_PP <span class="ot">&lt;-</span> <span class="cf">function</span>(x) intercept_Kill_13C_PP <span class="sc">+</span> x <span class="sc">*</span> slope_Kill_13C_PP</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="c-pe-degradation" class="level3">
 <h3 class="anchored" data-anchor-id="c-pe-degradation"><sup>13</sup>C-PE degradation</h3>
-<p>I</p>
+<ul>
+<li><strong>Calculations</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>PE_deg <span class="ot">&lt;-</span> experiment_total_C <span class="sc">|&gt;</span> </span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(incubation <span class="sc">==</span><span class="st">"PE"</span>, time <span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
@@ -568,7 +619,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13C_kill_umol =</span> <span class="fu">excess_kill_PE</span>(time)) <span class="sc">|&gt;</span> </span>
 <span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Net_excess_13C_umol =</span> excess_13CO2_umol <span class="sc">-</span> excess_13C_kill_umol)</span>
 <span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg,"PE_degradartion.csv")</span></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg,"./data_used/PE_degradartion.csv")</span></span>
 <span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>PE_deg_summary <span class="ot">&lt;-</span> PE_deg <span class="sc">|&gt;</span> </span>
 <span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
@@ -580,90 +631,562 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_perct_deg =</span> std_Net_excess_13C_umol<span class="sc">/</span>average_Net_excess_13C_umol<span class="sc">*</span>perct_degradation) <span class="sc">|&gt;</span> </span>
 <span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
 <span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg_summary,"PE_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PE_deg_summary,"./data_used/PE_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
-<details open="">
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:100%; "><table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"> incubation </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> time </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> average_excess_13CO2_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> std_excess_13CO2_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> average_Net_excess_13C_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> std_Net_excess_13C_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> perct_degradation </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> sd_perct_deg </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 24 </td>
+   <td style="text-align:right;"> 0.5891479 </td>
+   <td style="text-align:right;"> 0.0117035 </td>
+   <td style="text-align:right;"> 0.1280705 </td>
+   <td style="text-align:right;"> 0.0117035 </td>
+   <td style="text-align:right;"> 31.40138 </td>
+   <td style="text-align:right;"> 2.869559 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 72 </td>
+   <td style="text-align:right;"> 0.6329391 </td>
+   <td style="text-align:right;"> 0.0246419 </td>
+   <td style="text-align:right;"> 0.1732285 </td>
+   <td style="text-align:right;"> 0.0246419 </td>
+   <td style="text-align:right;"> 42.47359 </td>
+   <td style="text-align:right;"> 6.041906 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 96 </td>
+   <td style="text-align:right;"> 0.6093867 </td>
+   <td style="text-align:right;"> 0.0172494 </td>
+   <td style="text-align:right;"> 0.1503596 </td>
+   <td style="text-align:right;"> 0.0172494 </td>
+   <td style="text-align:right;"> 36.86639 </td>
+   <td style="text-align:right;"> 4.229354 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 192 </td>
+   <td style="text-align:right;"> 0.5069581 </td>
+   <td style="text-align:right;"> 0.0182046 </td>
+   <td style="text-align:right;"> 0.0506645 </td>
+   <td style="text-align:right;"> 0.0182046 </td>
+   <td style="text-align:right;"> 12.42235 </td>
+   <td style="text-align:right;"> 4.463545 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 216 </td>
+   <td style="text-align:right;"> 0.6419121 </td>
+   <td style="text-align:right;"> 0.0383434 </td>
+   <td style="text-align:right;"> 0.1863019 </td>
+   <td style="text-align:right;"> 0.0383434 </td>
+   <td style="text-align:right;"> 45.67901 </td>
+   <td style="text-align:right;"> 9.401350 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 240 </td>
+   <td style="text-align:right;"> 0.6311365 </td>
+   <td style="text-align:right;"> 0.0127988 </td>
+   <td style="text-align:right;"> 0.1762097 </td>
+   <td style="text-align:right;"> 0.0127988 </td>
+   <td style="text-align:right;"> 43.20454 </td>
+   <td style="text-align:right;"> 3.138111 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 264 </td>
+   <td style="text-align:right;"> 0.6314236 </td>
+   <td style="text-align:right;"> 0.0499687 </td>
+   <td style="text-align:right;"> 0.1771802 </td>
+   <td style="text-align:right;"> 0.0499687 </td>
+   <td style="text-align:right;"> 43.44248 </td>
+   <td style="text-align:right;"> 12.251728 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 336 </td>
+   <td style="text-align:right;"> 0.6876738 </td>
+   <td style="text-align:right;"> 0.0216128 </td>
+   <td style="text-align:right;"> 0.2354805 </td>
+   <td style="text-align:right;"> 0.0216128 </td>
+   <td style="text-align:right;"> 57.73705 </td>
+   <td style="text-align:right;"> 5.299194 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 360 </td>
+   <td style="text-align:right;"> 0.6776854 </td>
+   <td style="text-align:right;"> 0.0131558 </td>
+   <td style="text-align:right;"> 0.2261755 </td>
+   <td style="text-align:right;"> 0.0131558 </td>
+   <td style="text-align:right;"> 55.45557 </td>
+   <td style="text-align:right;"> 3.225644 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 384 </td>
+   <td style="text-align:right;"> 0.7007004 </td>
+   <td style="text-align:right;"> 0.0141444 </td>
+   <td style="text-align:right;"> 0.2498740 </td>
+   <td style="text-align:right;"> 0.0141444 </td>
+   <td style="text-align:right;"> 61.26615 </td>
+   <td style="text-align:right;"> 3.468028 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 408 </td>
+   <td style="text-align:right;"> 0.6789594 </td>
+   <td style="text-align:right;"> 0.0581656 </td>
+   <td style="text-align:right;"> 0.2288163 </td>
+   <td style="text-align:right;"> 0.0581656 </td>
+   <td style="text-align:right;"> 56.10306 </td>
+   <td style="text-align:right;"> 14.261511 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 432 </td>
+   <td style="text-align:right;"> 0.5901102 </td>
+   <td style="text-align:right;"> 0.0208020 </td>
+   <td style="text-align:right;"> 0.1406505 </td>
+   <td style="text-align:right;"> 0.0208020 </td>
+   <td style="text-align:right;"> 34.48585 </td>
+   <td style="text-align:right;"> 5.100412 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 504 </td>
+   <td style="text-align:right;"> 0.6888762 </td>
+   <td style="text-align:right;"> 0.0253433 </td>
+   <td style="text-align:right;"> 0.2414668 </td>
+   <td style="text-align:right;"> 0.0253433 </td>
+   <td style="text-align:right;"> 59.20480 </td>
+   <td style="text-align:right;"> 6.213885 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 552 </td>
+   <td style="text-align:right;"> 0.6686987 </td>
+   <td style="text-align:right;"> 0.0203169 </td>
+   <td style="text-align:right;"> 0.2226560 </td>
+   <td style="text-align:right;"> 0.0203169 </td>
+   <td style="text-align:right;"> 54.59263 </td>
+   <td style="text-align:right;"> 4.981465 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 600 </td>
+   <td style="text-align:right;"> 0.7066194 </td>
+   <td style="text-align:right;"> 0.0231106 </td>
+   <td style="text-align:right;"> 0.2619435 </td>
+   <td style="text-align:right;"> 0.0231106 </td>
+   <td style="text-align:right;"> 64.22545 </td>
+   <td style="text-align:right;"> 5.666437 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PE </td>
+   <td style="text-align:right;"> 696 </td>
+   <td style="text-align:right;"> 0.6612643 </td>
+   <td style="text-align:right;"> 0.0091100 </td>
+   <td style="text-align:right;"> 0.2193220 </td>
+   <td style="text-align:right;"> 0.0091100 </td>
+   <td style="text-align:right;"> 53.77516 </td>
+   <td style="text-align:right;"> 2.233675 </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+<ul>
+<li><strong>¹³C-PE net degradation plot</strong></li>
+</ul>
+<div class="cell">
+<details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>plot_PE_net <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PE_deg_summary, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_Net_excess_13C_umol)) <span class="sc">+</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"darkseagreen3"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#8F5D72"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>average_Net_excess_13C_umol<span class="sc">-</span>std_Net_excess_13C_umol, </span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>average_Net_excess_13C_umol<span class="sc">+</span>std_Net_excess_13C_umol),</span>
 <span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span>.<span class="dv">2</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(0,1)+</span></span>
-<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto 13Co2 production 13C-PE incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
-<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>plot_PE_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># scale_color_manual(values=  "#8F5D72")+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F, </span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)),</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>, </span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">label.y =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto ¹³Co2 production ¹³C-PE incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>plot_PE_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="documentation_files/figure-html/PE%20net%20degradation%20plots-1.png" class="img-fluid" width="672"></p>
+<p><img src="documentation_files/figure-html/¹³C-PE%20net%20degradation%20plots-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li><strong>¹³C-PE percentage degradation plot</strong></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>plot_PE_percent <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PE_deg_summary, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> perct_degradation)) <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"#8F5D72"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>perct_degradation<span class="sc">-</span>sd_perct_deg, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>perct_degradation<span class="sc">+</span>sd_perct_deg),</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span><span class="fl">0.3</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x ,</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F,</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>,</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x ,</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)),</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>,</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>,</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">label.y =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">100</span>)<span class="sc">+</span></span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Percentage of degradation"</span>)<span class="sc">+</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"¹³C-PE degradation"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>plot_PE_percent  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/¹³C-PE%20percentage%20degradation%20plot-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
 <section id="c-pp-degradation" class="level3">
 <h3 class="anchored" data-anchor-id="c-pp-degradation"><sup>13</sup>C-PP degradation</h3>
+<ul>
+<li><strong>Calculations</strong></li>
+</ul>
 <div class="cell">
-<details open="">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>PP_deg <span class="ot">&lt;-</span> experiment_total_C <span class="sc">|&gt;</span> </span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(incubation <span class="sc">==</span><span class="st">"PP"</span>, time <span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fract13_CO2 =</span> (Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc) <span class="sc">|&gt;</span> </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13C_kill_umol =</span> <span class="fu">excess_kill_PP</span>(time)) <span class="sc">|&gt;</span> </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Net_excess_13C_umol =</span> (excess_13CO2_umol <span class="sc">-</span> excess_13C_kill_umol)<span class="sc">*</span><span class="dv">3</span>) <span class="co">#the x3 is because only one in every 3 carbon atoms are labelled in the bought 13C-PP powder</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg,"./data_used/PP_degradartion.csv")</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>PP_deg_summary <span class="ot">&lt;-</span> PP_deg <span class="sc">|&gt;</span> </span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol),</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol),</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_Net_excess_13C_umol =</span> <span class="fu">mean</span>(Net_excess_13C_umol),</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_Net_excess_13C_umol =</span> <span class="fu">sd</span>(Net_excess_13C_umol)) <span class="sc">|&gt;</span></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perct_degradation =</span> average_Net_excess_13C_umol<span class="sc">/</span>PP_DOC_injected_umol<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_perct_deg =</span> std_Net_excess_13C_umol<span class="sc">/</span>average_Net_excess_13C_umol<span class="sc">*</span>perct_degradation) <span class="sc">|&gt;</span> </span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg_summary,"./data_used/PP_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>PP_deg <span class="ot">&lt;-</span> experiment_total_C <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(incubation <span class="sc">==</span><span class="st">"PP"</span>, time <span class="sc">&gt;</span><span class="dv">0</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(incubation, time, total_C_umol, delta_13C) <span class="sc">|&gt;</span> </span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Fract13_CO2 =</span> (Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">/</span>((Rvpdb<span class="sc">*</span>((delta_13C<span class="sc">/</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">1</span>)))<span class="sc">+</span><span class="dv">1</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perc_13C =</span> Fract13_CO2<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">D13C_CO2_perc =</span> perc_13C <span class="sc">-</span> perc_fract_13C_backgrounnd) <span class="sc">|&gt;</span> </span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13CO2_umol =</span> total_C_umol<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span>D13C_CO2_perc) <span class="sc">|&gt;</span> </span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">excess_13C_kill_umol =</span> <span class="fu">excess_kill_PP</span>(time)) <span class="sc">|&gt;</span> </span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Net_excess_13C_umol =</span> (excess_13CO2_umol <span class="sc">-</span> excess_13C_kill_umol)<span class="sc">*</span><span class="dv">3</span>) <span class="co">#the x3 is because only one in every 3 carbon atoms are labelled in the bought 13C-PP powder</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg,"./data_used/PP_degradartion.csv")</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>PP_deg_summary <span class="ot">&lt;-</span> PP_deg <span class="sc">|&gt;</span> </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(incubation,time) <span class="sc">|&gt;</span> </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">average_excess_13CO2_umol =</span> <span class="fu">mean</span>(excess_13CO2_umol),</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_excess_13CO2_umol =</span> <span class="fu">sd</span>(excess_13CO2_umol),</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>            <span class="at">average_Net_excess_13C_umol =</span> <span class="fu">mean</span>(Net_excess_13C_umol),</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">std_Net_excess_13C_umol =</span> <span class="fu">sd</span>(Net_excess_13C_umol)) <span class="sc">|&gt;</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">perct_degradation =</span> average_Net_excess_13C_umol<span class="sc">/</span>PP_DOC_injected_umol<span class="sc">*</span><span class="dv">100</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sd_perct_deg =</span> std_Net_excess_13C_umol<span class="sc">/</span>average_Net_excess_13C_umol<span class="sc">*</span>perct_degradation) <span class="sc">|&gt;</span> </span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a><span class="co"># write_csv(PP_deg_summary,"./data_used/PP_degradartion_summary.csv")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 <div class="cell">
-<details open="">
+<div class="cell-output-display">
+
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:200px; overflow-x: scroll; width:100%; "><table class=" lightable-paper" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;position: sticky; top:0; background-color: #FFFFFF;"> incubation </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> time </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> average_excess_13CO2_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> std_excess_13CO2_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> average_Net_excess_13C_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> std_Net_excess_13C_umol </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> perct_degradation </th>
+   <th style="text-align:right;position: sticky; top:0; background-color: #FFFFFF;"> sd_perct_deg </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 24 </td>
+   <td style="text-align:right;"> 0.6401029 </td>
+   <td style="text-align:right;"> 0.0187346 </td>
+   <td style="text-align:right;"> 0.4084752 </td>
+   <td style="text-align:right;"> 0.0562039 </td>
+   <td style="text-align:right;"> 11.89053 </td>
+   <td style="text-align:right;"> 1.636069 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 72 </td>
+   <td style="text-align:right;"> 0.9169137 </td>
+   <td style="text-align:right;"> 0.0329115 </td>
+   <td style="text-align:right;"> 1.2321487 </td>
+   <td style="text-align:right;"> 0.0987345 </td>
+   <td style="text-align:right;"> 35.86728 </td>
+   <td style="text-align:right;"> 2.874115 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 96 </td>
+   <td style="text-align:right;"> 0.9145265 </td>
+   <td style="text-align:right;"> 0.0549144 </td>
+   <td style="text-align:right;"> 1.2216078 </td>
+   <td style="text-align:right;"> 0.1647433 </td>
+   <td style="text-align:right;"> 35.56044 </td>
+   <td style="text-align:right;"> 4.795602 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 192 </td>
+   <td style="text-align:right;"> 0.9358056 </td>
+   <td style="text-align:right;"> 0.0540014 </td>
+   <td style="text-align:right;"> 1.2719274 </td>
+   <td style="text-align:right;"> 0.1620043 </td>
+   <td style="text-align:right;"> 37.02522 </td>
+   <td style="text-align:right;"> 4.715870 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 216 </td>
+   <td style="text-align:right;"> 0.9794037 </td>
+   <td style="text-align:right;"> 0.0374438 </td>
+   <td style="text-align:right;"> 1.3993422 </td>
+   <td style="text-align:right;"> 0.1123313 </td>
+   <td style="text-align:right;"> 40.73421 </td>
+   <td style="text-align:right;"> 3.269913 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 240 </td>
+   <td style="text-align:right;"> 0.9870650 </td>
+   <td style="text-align:right;"> 0.0344319 </td>
+   <td style="text-align:right;"> 1.4189466 </td>
+   <td style="text-align:right;"> 0.1032956 </td>
+   <td style="text-align:right;"> 41.30488 </td>
+   <td style="text-align:right;"> 3.006887 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 264 </td>
+   <td style="text-align:right;"> 1.0438816 </td>
+   <td style="text-align:right;"> 0.0777938 </td>
+   <td style="text-align:right;"> 1.5860169 </td>
+   <td style="text-align:right;"> 0.2333813 </td>
+   <td style="text-align:right;"> 46.16822 </td>
+   <td style="text-align:right;"> 6.793621 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 336 </td>
+   <td style="text-align:right;"> 1.0669925 </td>
+   <td style="text-align:right;"> 0.0465272 </td>
+   <td style="text-align:right;"> 1.6452114 </td>
+   <td style="text-align:right;"> 0.1395815 </td>
+   <td style="text-align:right;"> 47.89135 </td>
+   <td style="text-align:right;"> 4.063153 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 360 </td>
+   <td style="text-align:right;"> 1.0783708 </td>
+   <td style="text-align:right;"> 0.0337229 </td>
+   <td style="text-align:right;"> 1.6759669 </td>
+   <td style="text-align:right;"> 0.1011688 </td>
+   <td style="text-align:right;"> 48.78662 </td>
+   <td style="text-align:right;"> 2.944977 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 384 </td>
+   <td style="text-align:right;"> 1.1033007 </td>
+   <td style="text-align:right;"> 0.0984060 </td>
+   <td style="text-align:right;"> 1.7473771 </td>
+   <td style="text-align:right;"> 0.2952180 </td>
+   <td style="text-align:right;"> 50.86534 </td>
+   <td style="text-align:right;"> 8.593660 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 408 </td>
+   <td style="text-align:right;"> 0.9319133 </td>
+   <td style="text-align:right;"> 0.0361741 </td>
+   <td style="text-align:right;"> 1.2298355 </td>
+   <td style="text-align:right;"> 0.1085222 </td>
+   <td style="text-align:right;"> 35.79994 </td>
+   <td style="text-align:right;"> 3.159030 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 432 </td>
+   <td style="text-align:right;"> 1.0254757 </td>
+   <td style="text-align:right;"> 0.1024179 </td>
+   <td style="text-align:right;"> 1.5071433 </td>
+   <td style="text-align:right;"> 0.3072536 </td>
+   <td style="text-align:right;"> 43.87225 </td>
+   <td style="text-align:right;"> 8.944010 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 504 </td>
+   <td style="text-align:right;"> 1.0744701 </td>
+   <td style="text-align:right;"> 0.0677970 </td>
+   <td style="text-align:right;"> 1.6439882 </td>
+   <td style="text-align:right;"> 0.2033910 </td>
+   <td style="text-align:right;"> 47.85574 </td>
+   <td style="text-align:right;"> 5.920620 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 552 </td>
+   <td style="text-align:right;"> 1.1097607 </td>
+   <td style="text-align:right;"> 0.0246624 </td>
+   <td style="text-align:right;"> 1.7431009 </td>
+   <td style="text-align:right;"> 0.0739872 </td>
+   <td style="text-align:right;"> 50.74086 </td>
+   <td style="text-align:right;"> 2.153733 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 600 </td>
+   <td style="text-align:right;"> 1.1464185 </td>
+   <td style="text-align:right;"> 0.0207525 </td>
+   <td style="text-align:right;"> 1.8463155 </td>
+   <td style="text-align:right;"> 0.0622574 </td>
+   <td style="text-align:right;"> 53.74539 </td>
+   <td style="text-align:right;"> 1.812283 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PP </td>
+   <td style="text-align:right;"> 696 </td>
+   <td style="text-align:right;"> 1.0843282 </td>
+   <td style="text-align:right;"> 0.0461662 </td>
+   <td style="text-align:right;"> 1.6465269 </td>
+   <td style="text-align:right;"> 0.1384987 </td>
+   <td style="text-align:right;"> 47.92964 </td>
+   <td style="text-align:right;"> 4.031635 </td>
+  </tr>
+</tbody>
+</table></div>
+
+</div>
+</div>
+<ul>
+<li><strong>¹³C-PP net degradation plot</strong></li>
+</ul>
+<div class="cell">
+<details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>plot_PP_net <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PP_deg_summary, <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_Net_excess_13C_umol)) <span class="sc">+</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"cornflowerblue"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>average_Net_excess_13C_umol<span class="sc">-</span>std_Net_excess_13C_umol, </span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>average_Net_excess_13C_umol<span class="sc">+</span>std_Net_excess_13C_umol),</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span>.<span class="dv">2</span>, <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values=</span>  safe)<span class="sc">+</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="at">se =</span> F, <span class="at">color =</span> <span class="st">"black"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , <span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">after_stat</span>(eq.label)), <span class="at">coef.digits =</span> <span class="dv">10</span>, <span class="at">size=</span> <span class="dv">4</span>) <span class="sc">+</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(0,2)+</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto 13Co2 production 13C-PP incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>plot_PP_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>plot_PP_net <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PP_deg_summary, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> average_Net_excess_13C_umol)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"#5D8F5F"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>average_Net_excess_13C_umol<span class="sc">-</span>std_Net_excess_13C_umol, </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>average_Net_excess_13C_umol<span class="sc">+</span>std_Net_excess_13C_umol),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span>.<span class="dv">2</span>, </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F, </span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>, </span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>, </span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x , </span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)),</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>, </span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>,</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">label.y =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># ylim(0,5)+</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"neto ¹³Co2 production ¹³C-PP incubations"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>plot_PP_net  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="documentation_files/figure-html/PP%20net%20degradation%20plots-1.png" class="img-fluid" width="672"></p>
+<p><img src="documentation_files/figure-html/¹³C-PP%20net%20degradation%20plot-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<ul>
+<li><strong>¹³C-PP percentage degradation plot</strong></li>
+</ul>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>plot_PP_percent <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> PP_deg_summary, </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">aes</span>(<span class="at">x =</span> time, <span class="at">y =</span> perct_degradation)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>( <span class="at">color =</span> <span class="st">"#5D8F5F"</span>, <span class="at">size =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin=</span>perct_degradation<span class="sc">-</span>sd_perct_deg, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ymax=</span>perct_degradation<span class="sc">+</span>sd_perct_deg),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">width=</span><span class="fl">0.3</span>, </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">position=</span><span class="fu">position_dodge</span>(<span class="fl">0.05</span>))<span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">formula =</span> y <span class="sc">~</span> x ,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> F,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">color =</span> <span class="st">"black"</span>,</span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">1</span>,</span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">linetype =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_poly_eq</span>(<span class="at">formula =</span> y <span class="sc">~</span> x ,</span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a>               <span class="at">method =</span> <span class="st">"lm"</span>,</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a>               <span class="fu">use_label</span>(<span class="fu">c</span>(<span class="st">"eq"</span>, <span class="st">"r2"</span>)),</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">coef.digits =</span> <span class="dv">10</span>,</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>               <span class="at">size=</span> <span class="dv">4</span>,</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a>               <span class="at">label.y =</span> <span class="fl">0.85</span>) <span class="sc">+</span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>,<span class="dv">100</span>)<span class="sc">+</span></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"¹³C-PP degradation percentage"</span>, <span class="at">subtitle =</span> <span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">11</span>, <span class="at">face =</span> <span class="st">"bold"</span>))</span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a>plot_PP_percent  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="documentation_files/figure-html/¹³C-PP%20percentage%20degradation%20plot-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>

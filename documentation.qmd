@@ -1,5 +1,5 @@
 ---
-title: "13C_nanoplastics_degradation_analysis"
+title: "¹³C nanoplastics degradation analysis"
 author: "E. ZEGHAL"
 date-modified: "Last compiled on `r format(Sys.time(), '%d %B, %Y')`"
 format: 
@@ -7,9 +7,8 @@ format:
     html-math-method: katex
     toc: true
     toc-location: left
-    toc-float: true
     toc-depth: 5
-    code-fold: show  
+    code-fold: true  
     highlight-style: a11y-dark
 theme:
   light: flatly
@@ -24,6 +23,8 @@ editor: visual
 library(tidyverse)
 # install.packages("ggpmisc")
 library("ggpmisc")
+# install.packages("kableExtra")
+library("kableExtra")
 ```
 
 ## CO~2~ in head-space
@@ -51,9 +52,14 @@ slope_1 <- linear_reg_1$coefficients
 calib_curve_1 <- ggplot(data = calib_1, aes(x = area, y = ppm)) +
   geom_smooth(method = "lm",formula = y ~ x + 0, se = F, color = "black", size = 1, linetype = 5) +
   # stat_poly_line(formula = y ~ x + 0) +
-  stat_poly_eq(formula = y ~ x + 0, aes(label = after_stat(eq.label)), coef.digits = 7, size= 5) +
+  stat_poly_eq(formula = y ~ x + 0,
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 7,
+               size= 4,
+               label.y = 0.75) +
   geom_point(color = "cadetblue", size = 3)+
-  theme_minimal()+
+  theme_classic()+
   ggtitle("calibration curve for CO2 PP, PE and background", subtitle = "Mishal - June 2022") +
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
@@ -77,9 +83,14 @@ slope_2 <- linear_reg_2$coefficients
 calib_curve_2 <- ggplot(data = calib_2, aes(x = area, y = ppm)) +
   geom_smooth(method = "lm",formula = y ~ x + 0, se = F, color = "black", size = 1, linetype = 5) +
   # stat_poly_line(formula = y ~ x + 0) +
-  stat_poly_eq(formula = y ~ x + 0, aes(label = after_stat(eq.label)), coef.digits = 7, size= 5) +
+  stat_poly_eq(formula = y ~ x + 0, 
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 7,
+               size= 4,
+               label.y = 0.75) +
   geom_point(color = "gold2", size = 3)+
-  theme_minimal()+
+  theme_classic()+
   ggtitle("calibration curve for CO2 repeat kill controls", subtitle = "Rachel - Nov 2022")+
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
@@ -163,7 +174,7 @@ experiment <- experiment |>
   mutate(CO2_mmol = ((pressure_bar+delta_pressure)*CO2_HS_ml)/(0.083145*(273.15+T_C))) |> 
   mutate(CO2_umol = CO2_mmol*1000)
   
-# write_csv(experiment, "../data_used/polymers_incubations_calc1.csv")
+# write_csv(experiment, "./data_used/polymers_incubations_calc1.csv")
 ```
 
 let's calculate the averages for each incubation time and type.
@@ -197,6 +208,8 @@ In order to calculate total CO2 amounts. the amount of CO2 in the liquid phase n
 
 One of the issues encountered here is that it wasn't possible to sub-sample for DIC measurements in each timepoint. (we are following CO2 production here so opening up our bottles isn't an option). what I have is DIC measurements at the beginning and the end of the experiment. as CO2 production followed a linear trend, I'll assume the same for DIC. So now I'll calculate the linear regression for the evolution of CO2 in the liquid phase for each type incubation
 
+-   **join all DIC data and get averages**
+
 ```{r DIC_models, warning=FALSE, results='hide'}
 
 DIC_tab <- read_delim("./data_used/DIC_measures.txt")
@@ -219,22 +232,36 @@ DIC_models$std_DIC_uM <- NULL
 
 ```
 
+-   **DIC models plots**
+
 ```{r, warning=FALSE, results='hide'}
-#|label: DIC models plots
+#| label: DIC models plots
 safe <- c ("#CC6677", "#DDCC77","#88CCEE" ,"#661100", "#117733", 
                     "#332288", "#44AA99", "#882255", 
                     "#6699CC", "#999933", "#888888","#AA4499" ) #palette
 
 
-models_DIC_plot <- ggplot(data = DIC_models, aes(x = time, y = ratio, group = incubation)) +
+models_DIC_plot <- ggplot(data = DIC_models, 
+                          aes(x = time, y = ratio, group = incubation)) +
   facet_grid(~incubation)+
-  geom_point( aes(shape = incubation, color = incubation), size = 3)+
+  geom_point( aes(shape = incubation, color = incubation),
+              size = 3)+
   scale_color_manual(values=  safe)+
-  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
-  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 2) +
+  geom_smooth(method = "lm",
+              formula = y ~ x , 
+              se = F, 
+              color = "black", 
+              size = 1, 
+              linetype = 5) +
+  stat_poly_eq(formula = y ~ x , 
+               method = "lm",
+               use_label(c("eq", "r2")), 
+               coef.digits = 10,
+               size= 2) +
   theme_minimal()+
   ylim(0,0.015)+
-  ggtitle("DIC linear regressions", subtitle = "") +
+  ggtitle("DIC linear regressions",
+          subtitle = "") +
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
         axis.text.x = element_text(size = 11, face = "bold"),
@@ -244,6 +271,8 @@ models_DIC_plot <- ggplot(data = DIC_models, aes(x = time, y = ratio, group = in
  
 models_DIC_plot 
 ```
+
+-   **Getting DIC models equations**
 
 ```{r, results='hide', warning=FALSE}
 #| label: getting DIC models equations
@@ -264,7 +293,7 @@ assign(paste0("intercept_linear_reg_", levels(DIC_models$incubation)[i]),
 mDIC_kill_PE <- function(x) intercept_linear_reg_Kill_13C_PE + x * slope_linear_reg_Kill_13C_PE
 mDIC_kill_PP <- function(x) intercept_linear_reg_Kill_13C_PP + x * slope_linear_reg_Kill_13C_PP
 mDIC_PE <- function(x) intercept_linear_reg_PE + x * slope_linear_reg_PE
-mDIC_PP <- function(x) intercept_linear_reg_PP + x * slope_linear_reg_PE
+mDIC_PP <- function(x) intercept_linear_reg_PP + x * slope_linear_reg_PP
 mDIC_SW_background <- function(x) intercept_linear_reg_SW_background + x * slope_linear_reg_SW_background
 ```
 
@@ -276,7 +305,7 @@ mDIC_SW_background <- function(x) intercept_linear_reg_SW_background + x * slope
 kills_total_C <- kill_c |> 
   mutate(mDIC = if_else(incubation == "Kill_13C_PE", CO2_umol/mDIC_kill_PE(time), if_else(incubation == "Kill_13C_PP", CO2_umol/mDIC_kill_PP(time),NA))) |> 
   mutate(total_C_umol= CO2_umol + mDIC)
-# write_csv(kills_total_C,"kills_total_c.csv")
+# write_csv(kills_total_C,"./data_used/kills_total_c.csv")
 ```
 
 ### Total CO~2~ in 13C-PE incubations, 13C-PP incubations and background seawater
@@ -287,7 +316,7 @@ kills_total_C <- kill_c |>
 experiment_total_C <- experiment |> 
   mutate(mDIC = if_else(incubation == "PE", CO2_umol/mDIC_PE(time), if_else(incubation == "PP", CO2_umol/mDIC_PP(time), if_else(incubation == "SW_background", CO2_umol/mDIC_SW_background(time), NA)))) |> 
   mutate(total_C_umol= CO2_umol + mDIC)
-# write_csv(experiment_total_C,"experiment_total_C.csv")
+# write_csv(experiment_total_C,"./data_used/experiment_total_C.csv")
 ```
 
 ## Nanoplastics degradation
@@ -351,26 +380,44 @@ kill_c_fract <- kills_total_C |>
   mutate(perc_13C = Fract13_CO2*100) |> 
   mutate(D13C_CO2_perc = perc_13C - perc_fract_13C_backgrounnd) |> 
   mutate(excess_13CO2_umol = total_C_umol/100*D13C_CO2_perc)
-  
-average_excess_kills <- kill_c_fract |> group_by(incubation,time) |> 
-  summarise(average_excess_13CO2_umol = mean(excess_13CO2_umol), std_excess_13CO2_umol = sd(excess_13CO2_umol)) |> 
+
+# write_csv(kill_c_fract,"./data_used/kill_c_fract.csv")
+
+average_excess_kills <- kill_c_fract |> 
+  group_by(incubation,time) |> 
+  summarise(average_excess_13CO2_umol = mean(excess_13CO2_umol),
+            std_excess_13CO2_umol = sd(excess_13CO2_umol)) |> 
   ungroup()
   
+# write_csv(average_excess_kills,"./data_used/average_excess_kills.csv")
 
 ```
+
+-   **Excess CO2 kills plots**
 
 ```{r, warning=FALSE, results='hide'}
 #| label: excess CO2 kills plots
 
-plot_excess_kills <- ggplot(data = average_excess_kills, aes(x = time, y = average_excess_13CO2_umol, group = incubation)) +
+plot_excess_kills <- ggplot(data = average_excess_kills, 
+                            aes(x = time, y = average_excess_13CO2_umol, group = incubation)) +
   facet_grid(~incubation)+
-  geom_point( aes( color = incubation), size = 3)+
-  scale_color_manual(values=  safe)+
-  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
-  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+  geom_point( aes( color = incubation), 
+              size = 3)+
+  scale_color_manual(values =  c("#F0D23C", "#433CF0"))+
+  geom_smooth(method = "lm",
+              formula = y ~ x , 
+              se = F, color = "black", 
+              size = 1, 
+              linetype = 5) +
+  stat_poly_eq(method = "lm",
+               formula = y ~ x , 
+               aes(label = after_stat(eq.label)), 
+               coef.digits = 10, 
+               size= 4) +
   theme_minimal()+
   ylim(0,1)+
-  ggtitle("average excess 13-co2 in kill controls", subtitle = "linear regressions") +
+  ggtitle("average excess 13-co2 in kill controls", 
+          subtitle = "linear regressions") +
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
         axis.text.x = element_text(size = 11, face = "bold"),
@@ -384,7 +431,7 @@ plot_excess_kills
 Now, I'll calculate the linear models for excess ^13^CO~2~ production in the ^13^C-PP kills controls and ^13^C-PE kill controls. This production isn't due to biological processes. These will be used as baseline to correct the excess ^13^CO~2~ production in the live incubations.
 
 ```{r}
-#|label: modelling excess 13C-CO2 kills
+#| label: modelling excess 13C-CO2 kills
   
 average_excess_kills <- average_excess_kills |> 
   mutate(across(where(is_character),as_factor))
@@ -392,7 +439,8 @@ average_excess_kills <- average_excess_kills |>
 
 for (i in 1:length(levels(average_excess_kills$incubation))) {
   
-linear_reg <- lm(average_excess_13CO2_umol ~time , data = average_excess_kills[average_excess_kills$incubation == levels(average_excess_kills$incubation)[i], ])
+linear_reg <- lm(average_excess_13CO2_umol ~time , 
+                 data = average_excess_kills[average_excess_kills$incubation == levels(average_excess_kills$incubation)[i], ])
 
 assign(paste0("slope_", levels(average_excess_kills$incubation)[i]),
        linear_reg$coefficients[["time"]]) 
@@ -406,10 +454,10 @@ excess_kill_PP <- function(x) intercept_Kill_13C_PP + x * slope_Kill_13C_PP
 
 ### ^13^C-PE degradation
 
-I
+-   **Calculations**
 
 ```{r, warning=FALSE}
-#| label: degradation 13C-PE
+#| label: degradation ¹³C-PE
 
 PE_deg <- experiment_total_C |> 
   filter(incubation =="PE", time >0) |> 
@@ -422,7 +470,7 @@ PE_deg <- experiment_total_C |>
   mutate(excess_13C_kill_umol = excess_kill_PE(time)) |> 
   mutate(Net_excess_13C_umol = excess_13CO2_umol - excess_13C_kill_umol)
 
-# write_csv(PE_deg,"PE_degradartion.csv")
+# write_csv(PE_deg,"./data_used/PE_degradartion.csv")
   
 PE_deg_summary <- PE_deg |> 
   group_by(incubation,time) |> 
@@ -434,23 +482,44 @@ PE_deg_summary <- PE_deg |>
   mutate(sd_perct_deg = std_Net_excess_13C_umol/average_Net_excess_13C_umol*perct_degradation) |> 
   ungroup()
 
-# write_csv(PE_deg_summary,"PE_degradartion_summary.csv")
+# write_csv(PE_deg_summary,"./data_used/PE_degradartion_summary.csv")
 ```
 
+```{r, echo=FALSE}
+#| label: PE degradation table
+
+kbl(PE_deg_summary) %>%
+  kable_paper() %>%
+  scroll_box(width = "100%", height = "200px")
+
+```
+
+-   **¹³C-PE net degradation plot**
+
 ```{r, warning=FALSE, results='hide'}
-#| label: PE net degradation plots
+#| label: ¹³C-PE net degradation plots
 
 plot_PE_net <- ggplot(data = PE_deg_summary, aes(x = time, y = average_Net_excess_13C_umol)) +
-  geom_point( color = "darkseagreen3", size = 3)+
+  geom_point(color = "#8F5D72", size = 3)+
   geom_errorbar(aes(ymin=average_Net_excess_13C_umol-std_Net_excess_13C_umol, 
                     ymax=average_Net_excess_13C_umol+std_Net_excess_13C_umol),
                 width=.2, position=position_dodge(0.05))+
-  scale_color_manual(values=  safe)+
-  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
-  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+  # scale_color_manual(values=  "#8F5D72")+
+  geom_smooth(method = "lm",
+              formula = y ~ x , 
+              se = F, 
+              color = "black", 
+              size = 1, 
+              linetype = 5) +
+  stat_poly_eq(formula = y ~ x , 
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 10, 
+               size= 4,
+               label.y = 0.8) +
   theme_minimal()+
-  # ylim(0,1)+
-  ggtitle("neto 13Co2 production 13C-PE incubations", subtitle = "") +
+  ylim(0,0.5)+
+  ggtitle("neto ¹³Co2 production ¹³C-PE incubations", subtitle = "") +
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
         axis.text.x = element_text(size = 11, face = "bold"),
@@ -460,10 +529,48 @@ plot_PE_net
 
 ```
 
+-   **¹³C-PE percentage degradation plot**
+
+```{r, warning=FALSE, results='hide'}
+#| label: ¹³C-PE percentage degradation plot
+
+plot_PE_percent <- ggplot(data = PE_deg_summary, 
+                      aes(x = time, y = perct_degradation)) +
+  geom_point( color = "#8F5D72", size = 3)+
+  geom_errorbar(aes(ymin=perct_degradation-sd_perct_deg, 
+                    ymax=perct_degradation+sd_perct_deg),
+                width=0.3, position=position_dodge(0.05))+
+  geom_smooth(method = "lm",
+              formula = y ~ x ,
+              se = F,
+              color = "black",
+              size = 1,
+              linetype = 5) +
+  stat_poly_eq(formula = y ~ x ,
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 10,
+               size= 4,
+               label.y = 0.85) +
+  theme_minimal()+
+  ylim(0,100)+
+  ylab("Percentage of degradation")+
+  ggtitle("¹³C-PE degradation", subtitle = "") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+
+plot_PE_percent  
+
+```
+
 ### ^13^C-PP degradation
 
-```{r, warning = FALSE}
-#| label: degradation 13C-PP
+-   **Calculations**
+
+```{r}
+#| label: degradation ¹³C-PP
 
 PP_deg <- experiment_total_C |> 
   filter(incubation =="PP", time >0) |> 
@@ -492,25 +599,82 @@ PP_deg_summary <- PP_deg |>
 # write_csv(PP_deg_summary,"./data_used/PP_degradartion_summary.csv")
 ```
 
-```{r, warning=FALSE, results='hide'}
-#| label: PP net degradation plots
+```{r, echo=FALSE}
+#| label: PP degradation table
 
-plot_PP_net <- ggplot(data = PP_deg_summary, aes(x = time, y = average_Net_excess_13C_umol)) +
-  geom_point( color = "cornflowerblue", size = 3)+
+kbl(PP_deg_summary) %>%
+  kable_paper() %>%
+  scroll_box(width = "100%", height = "200px")
+```
+
+-   **¹³C-PP net degradation plot**
+
+```{r, warning=FALSE, results='hide'}
+#| label: ¹³C-PP net degradation plot
+
+plot_PP_net <- ggplot(data = PP_deg_summary, 
+                      aes(x = time, y = average_Net_excess_13C_umol)) +
+  geom_point( color = "#5D8F5F", size = 3)+
   geom_errorbar(aes(ymin=average_Net_excess_13C_umol-std_Net_excess_13C_umol, 
                     ymax=average_Net_excess_13C_umol+std_Net_excess_13C_umol),
-                width=.2, position=position_dodge(0.05))+
-  scale_color_manual(values=  safe)+
-  geom_smooth(method = "lm",formula = y ~ x , se = F, color = "black", size = 1, linetype = 5) +
-  stat_poly_eq(formula = y ~ x , aes(label = after_stat(eq.label)), coef.digits = 10, size= 4) +
+                width=.2, 
+                position=position_dodge(0.05))+
+  geom_smooth(method = "lm",
+              formula = y ~ x , 
+              se = F, 
+              color = "black", 
+              size = 1, 
+              linetype = 5) +
+  stat_poly_eq(formula = y ~ x , 
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 10, 
+               size= 4,
+               label.y = 0.2) +
   theme_minimal()+
-  # ylim(0,2)+
-  ggtitle("neto 13Co2 production 13C-PP incubations", subtitle = "") +
+  # ylim(0,5)+
+  ggtitle("neto ¹³Co2 production ¹³C-PP incubations", subtitle = "") +
   theme(axis.title.y = element_text(face = "bold"),
         axis.title.x = element_text(face = "bold"),
         axis.text.x = element_text(size = 11, face = "bold"),
         axis.text.y = element_text(size = 11, face = "bold"))
 
 plot_PP_net  
+
+```
+
+-   **¹³C-PP percentage degradation plot**
+
+```{r, warning=FALSE, results='hide'}
+#| label: ¹³C-PP percentage degradation plot
+
+plot_PP_percent <- ggplot(data = PP_deg_summary, 
+                      aes(x = time, y = perct_degradation)) +
+  geom_point( color = "#5D8F5F", size = 3)+
+  geom_errorbar(aes(ymin=perct_degradation-sd_perct_deg, 
+                    ymax=perct_degradation+sd_perct_deg),
+                width=0.3, 
+                position=position_dodge(0.05))+
+  geom_smooth(method = "lm",
+              formula = y ~ x ,
+              se = F,
+              color = "black",
+              size = 1,
+              linetype = 5) +
+  stat_poly_eq(formula = y ~ x ,
+               method = "lm",
+               use_label(c("eq", "r2")),
+               coef.digits = 10,
+               size= 4,
+               label.y = 0.85) +
+  theme_minimal()+
+  ylim(0,100)+
+  ggtitle("¹³C-PP degradation percentage", subtitle = "") +
+  theme(axis.title.y = element_text(face = "bold"),
+        axis.title.x = element_text(face = "bold"),
+        axis.text.x = element_text(size = 11, face = "bold"),
+        axis.text.y = element_text(size = 11, face = "bold"))
+
+plot_PP_percent  
 
 ```
